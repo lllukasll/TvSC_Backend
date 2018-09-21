@@ -12,7 +12,7 @@ namespace TvSC.WebApi.Helpers
     {
         public AutoMapperProfile()
         {
-            CreateMap<AccountRegisterBindingModel, AppUser>();
+            
         }
     }
 }

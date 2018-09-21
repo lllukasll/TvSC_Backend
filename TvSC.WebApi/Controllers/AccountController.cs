@@ -3,42 +3,92 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TvSC.Data.BindingModels;
 using TvSC.Data.DbModels;
+using TvSC.Services.Interfaces;
 
 namespace TvSC.WebApi.Controllers
 {
     [Route("Account")]
-    public class AccountController : Controller
+    [Authorize]
+    public class AccountController : BaseResponseController
     {
-        private readonly IMapper _mapper;
-        private readonly UserManager<AppUser> _userManager;
+        private readonly IAccountService _accountService;
 
-        public AccountController(IMapper mapper)
+        public AccountController(IAccountService accountService)
         {
-            _mapper = mapper;
+            _accountService = accountService;
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Register([FromBody] AccountRegisterBindingModel registerBindingModel)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        [HttpPost("Register")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register([FromBody] RegisterBindingModel model)
+        {
 
-        //    var userIdentity = _mapper.Map(registerBindingModel);
-        //    var result = await _userManager.CreateAsync(userIdentity, registerBindingModel.Password);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelStateErrors());
+            }
 
-        //    if (!result.Succeeded)
-        //    {
-        //        return BadRequest("problem przy result w Register/AccountController");
-        //    }
+            var result = await _accountService.Register(model);
 
-        //    return Ok();
-        //}
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            //await _emailService.SendEmail(model.Email, "Platforma Browaru - aktywacja",
+            //    $"Witaj {model.UserName}!\n Aby aktywować swoje konto kliknij w poniższy link:\n http://localhost:18831/Users/Activate/" +
+            //    user.Guid);
+
+            return Ok(result);
+        }
+
+        [HttpPost("Login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] LoginBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelStateErrors());
+            }
+
+            var result = await _accountService.Login(model);
+
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPost("LogOut")]
+        public async Task LogOut()
+        {
+            await _accountService.LogOut();
+        }
+
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelStateErrors());
+            }
+
+            var userId = User.Identity.Name;
+            var result = await _accountService.ChangePassword(userId, model);
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
     }
 }
