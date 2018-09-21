@@ -74,8 +74,6 @@ namespace TvSC.WebApi
                 opt.ExpireTimeSpan = TimeSpan.FromDays(1);
             });
 
-            services.AddMvc();
-
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
@@ -86,6 +84,7 @@ namespace TvSC.WebApi
                         .Build());
             });
 
+            services.AddMvc();
 
         }
 
@@ -96,10 +95,10 @@ namespace TvSC.WebApi
             loggerFactory.AddDebug();
 
             app.UseAuthentication();
-
+            app.UseCors("CorsPolicy");
             app.UseMvc();
 
-            app.UseCors("CorsPolicy");
+            
 
             app.UseStaticFiles();
         }
