@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TvSC.Repo;
 
 namespace TvSC.Repo.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20180924101041_UpdatedEpisodeModel")]
+    partial class UpdatedEpisodeModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,23 +33,6 @@ namespace TvSC.Repo.Migrations
 
                     b.Property<int>("EpisodeNumber");
 
-                    b.Property<int>("SeasonId");
-
-                    b.Property<int>("SeasonNumber");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SeasonId");
-
-                    b.ToTable("Episodes");
-                });
-
-            modelBuilder.Entity("TvSC.Data.DbModels.Season", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<int>("SeasonNumber");
 
                     b.Property<int>("TvShowId");
@@ -56,7 +41,7 @@ namespace TvSC.Repo.Migrations
 
                     b.HasIndex("TvShowId");
 
-                    b.ToTable("Seasons");
+                    b.ToTable("Episodes");
                 });
 
             modelBuilder.Entity("TvSC.Data.DbModels.TvShow", b =>
@@ -119,16 +104,8 @@ namespace TvSC.Repo.Migrations
 
             modelBuilder.Entity("TvSC.Data.DbModels.Episode", b =>
                 {
-                    b.HasOne("TvSC.Data.DbModels.Season", "Season")
-                        .WithMany("Episodes")
-                        .HasForeignKey("SeasonId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("TvSC.Data.DbModels.Season", b =>
-                {
                     b.HasOne("TvSC.Data.DbModels.TvShow", "TvShow")
-                        .WithMany("Seasons")
+                        .WithMany()
                         .HasForeignKey("TvShowId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

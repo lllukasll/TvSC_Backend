@@ -3,61 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TvSC.Repo;
 
 namespace TvSC.Repo.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20180924100727_AddedEpisodeModel")]
+    partial class AddedEpisodeModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("TvSC.Data.DbModels.Episode", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("AiringDate");
-
-                    b.Property<string>("EpisodeName");
-
-                    b.Property<int>("EpisodeNumber");
-
-                    b.Property<int>("SeasonId");
-
-                    b.Property<int>("SeasonNumber");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SeasonId");
-
-                    b.ToTable("Episodes");
-                });
-
-            modelBuilder.Entity("TvSC.Data.DbModels.Season", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("SeasonNumber");
-
-                    b.Property<int>("TvShowId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TvShowId");
-
-                    b.ToTable("Seasons");
-                });
 
             modelBuilder.Entity("TvSC.Data.DbModels.TvShow", b =>
                 {
@@ -115,22 +77,6 @@ namespace TvSC.Repo.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("TvSC.Data.DbModels.Episode", b =>
-                {
-                    b.HasOne("TvSC.Data.DbModels.Season", "Season")
-                        .WithMany("Episodes")
-                        .HasForeignKey("SeasonId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("TvSC.Data.DbModels.Season", b =>
-                {
-                    b.HasOne("TvSC.Data.DbModels.TvShow", "TvShow")
-                        .WithMany("Seasons")
-                        .HasForeignKey("TvShowId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

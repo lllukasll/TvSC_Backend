@@ -2,9 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 using AutoMapper;
 using TvSC.Data.BindingModels;
+using TvSC.Data.BindingModels.Episode;
+using TvSC.Data.BindingModels.Season;
+using TvSC.Data.BindingModels.TvShow;
 using TvSC.Data.DbModels;
+using TvSC.Data.DtoModels.Episodes;
+using TvSC.Data.DtoModels.Season;
+using TvSC.Data.DtoModels.TvShow;
 
 namespace TvSC.WebApi.Helpers
 {
@@ -12,7 +19,22 @@ namespace TvSC.WebApi.Helpers
     {
         public AutoMapperProfile()
         {
-            
+            CreateMappings();
+        }
+
+        public void CreateMappings()
+        {
+            CreateMap<TvShow, AddTvShowBindingModel>().ReverseMap();
+            CreateMap<TvShow, UpdateTvShowBindingModel>().ReverseMap();
+            CreateMap<TvShow, TvShowResponse>().ReverseMap();
+
+            CreateMap<Season, SeasonResponse>().ReverseMap();
+            CreateMap<Season, SeasonResponseDto>().ReverseMap();
+            CreateMap<Season, AddSeasonBindingModel>().ReverseMap();
+
+            CreateMap<Episode, EpisodeDto>().ReverseMap();
+            CreateMap<Episode, AddEpisodeBindingModel>().ReverseMap();
+            CreateMap<Episode, UpdateEpisodeBindingModel>().ReverseMap();
         }
     }
 }

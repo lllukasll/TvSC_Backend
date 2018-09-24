@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using TvSC.Data.DbModels;
 using TvSC.Repo;
 using TvSC.Repo.Interfaces;
@@ -42,6 +44,8 @@ namespace TvSC.WebApi
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<ITvShowService, TvShowService>();
+            services.AddTransient<ISeasonService, SeasonService>();
+            services.AddTransient<IEpisodeService, EpisodeService>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             services.AddIdentityCore<User>(options => { });
@@ -84,7 +88,10 @@ namespace TvSC.WebApi
                         .Build());
             });
 
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(options => { options.SerializerSettings.Formatting = Formatting.Indented; })
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+                .AddDataAnnotationsLocalization();
 
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TvSC.Data.DtoModels;
+using TvSC.Data.Keys;
 
 namespace TvSC.WebApi.Controllers
 {
@@ -19,7 +20,14 @@ namespace TvSC.WebApi.Controllers
 
                 foreach (var error in value.Errors)
                 {
-                    response.Errors.Add(error.Exception != null ? "Nieprawidłowy format danych" : error.ErrorMessage);
+                    if (error.Exception != null)
+                    {
+                        response.AddError(Model.DataFormat, "Nieprawidłowy format danych");
+                    }
+                    else
+                    {
+                        response.AddError(Model.DataFormat, error.ErrorMessage);
+                    }
                 }
             }
             return response;

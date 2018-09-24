@@ -15,6 +15,8 @@ namespace TvSC.Repo
 
         public DbSet<User> Users { get; set; }
         public DbSet<TvShow> TvShows { get; set; }
+        public DbSet<Episode> Episodes { get; set; }
+        public DbSet<Season> Seasons { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -25,6 +27,15 @@ namespace TvSC.Repo
                 .Ignore(b => b.PhoneNumberConfirmed)
                 .Ignore(b => b.PhoneNumber)
                 .ToTable("Users");
+
+            builder.Entity<TvShow>()
+                .HasMany(x => x.Seasons);
+
+            builder.Entity<Season>()
+                .HasMany(x => x.Episodes);
+
+            builder.Entity<Episode>()
+                .HasOne(b => b.Season);                
 
             base.OnModelCreating(builder);
         }

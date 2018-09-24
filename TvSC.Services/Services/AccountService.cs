@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using TvSC.Data.BindingModels;
 using TvSC.Data.DbModels;
 using TvSC.Data.DtoModels;
+using TvSC.Data.Keys;
 using TvSC.Services.Interfaces;
 
 namespace TvSC.Services.Services
@@ -28,13 +30,13 @@ namespace TvSC.Services.Services
             var userFindByName = await _userManager.FindByNameAsync(model.UserName);
             if (userFindByName != null)
             {
-                response.Errors.Add("Użytkownik o takiej nazwie już istnineje.");
+                response.AddError(Model.Account, Error.account_UserExists);
             }
 
             var userFingByEmail = await _userManager.FindByEmailAsync(model.Email);
             if (userFingByEmail != null)
             {
-                response.Errors.Add("Użytkownik o takim e-mail'u już istnieje.");
+                response.AddError(Model.Account, Error.account_EmailExists);
             }
 
             if (userFindByName == null && userFingByEmail == null)
@@ -53,7 +55,7 @@ namespace TvSC.Services.Services
                 {
                     foreach (var error in result.Errors)
                     {
-                        response.Errors.Add(error.Description);
+                        response.AddError(Model.Account, error.Description);
                     }
                     return response;
                 }
@@ -82,7 +84,8 @@ namespace TvSC.Services.Services
                 await _httpContext.HttpContext.SignInAsync("Identity.Application", new ClaimsPrincipal(identity), new AuthenticationProperties { IsPersistent = true });
                 return response;
             }
-            response.Errors.Add("Błędny login lub hasło.");
+
+            response.AddError(Model.Account, Error.account_WrongCredentials);
             return response;
         }
 
@@ -98,7 +101,7 @@ namespace TvSC.Services.Services
 
             if (user == null)
             {
-                response.Errors.Add("Nie znaleziona użytkownika w bazie danych.");
+                response.AddError(Model.Account, Error.account_UserNotFound);
             }
 
             var result = await _userManager.ChangePasswordAsync(user, model.Password, model.NewPassword);
@@ -106,7 +109,7 @@ namespace TvSC.Services.Services
             {
                 foreach (var error in result.Errors)
                 {
-                    response.Errors.Add(error.Description);
+                    response.AddError(Model.Account, error.Description);
                 }
                 return response;
             }

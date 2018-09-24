@@ -60,6 +60,7 @@ namespace TvSC.Repo.Repositories
         {
             return GetAll(includes).Where(getBy);
         }
+        
 
         public async Task<bool> ExistAsync(Expression<Func<T, bool>> getBy, params Expression<Func<T, object>>[] includes)
         {
@@ -70,6 +71,34 @@ namespace TvSC.Repo.Repositories
             }
 
             return await query.AnyAsync(getBy);
+        }
+
+        public async Task LoadRelatedCollection<TInclude>(T entity, Expression<Func<T, IEnumerable<TInclude>>> collection,
+            params Expression<Func<TInclude, object>>[] includes) where TInclude : BaseModel
+        {
+            var query = _dbContext.Entry(entity).Collection(collection).Query();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            await query.LoadAsync();
+        }
+
+        public async Task LoadRelatedCollectionThenIncludeCollection<TInclude, TIncluded, TThenInclude>(T entity, Expression<Func<T, IEnumerable<TInclude>>> collection,
+            Expression<Func<TInclude, TIncluded>> include, Expression<Func<TIncluded, IEnumerable<TThenInclude>>> thenInclude)
+            where TInclude : BaseModel where TThenInclude : BaseModel where TIncluded : BaseModel
+        {
+            await _dbContext.Entry(entity).Collection(collection).Query().Include(include).ThenInclude(thenInclude).LoadAsync();
+
+        }
+
+        public async Task LoadRelatedCollectionThenIncludeCollection<TInclude, TIncluded, TThenInclude>(T entity, Expression<Func<T, IEnumerable<TInclude>>> collection1,
+            Expression<Func<TInclude, IEnumerable<TIncluded>>> collection2, Expression<Func<TIncluded, TThenInclude>> thenInclude)
+            where TInclude : BaseModel where TThenInclude : BaseModel where TIncluded : BaseModel
+        {
+            await _dbContext.Entry(entity).Collection(collection1).Query().OfType<TInclude>().Include(collection2).ThenInclude(thenInclude).LoadAsync();
         }
 
         public async Task<bool> IsEmptyAsync()

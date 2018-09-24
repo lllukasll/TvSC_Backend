@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TvSC.Repo;
 
 namespace TvSC.Repo.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20180924101846_UpdatedTvShowAndSeasonModel")]
+    partial class UpdatedTvShowAndSeasonModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,13 +33,17 @@ namespace TvSC.Repo.Migrations
 
                     b.Property<int>("EpisodeNumber");
 
-                    b.Property<int>("SeasonId");
+                    b.Property<int?>("SeasonId");
 
                     b.Property<int>("SeasonNumber");
+
+                    b.Property<int>("TvShowId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SeasonId");
+
+                    b.HasIndex("TvShowId");
 
                     b.ToTable("Episodes");
                 });
@@ -119,9 +125,13 @@ namespace TvSC.Repo.Migrations
 
             modelBuilder.Entity("TvSC.Data.DbModels.Episode", b =>
                 {
-                    b.HasOne("TvSC.Data.DbModels.Season", "Season")
+                    b.HasOne("TvSC.Data.DbModels.Season")
                         .WithMany("Episodes")
-                        .HasForeignKey("SeasonId")
+                        .HasForeignKey("SeasonId");
+
+                    b.HasOne("TvSC.Data.DbModels.TvShow", "TvShow")
+                        .WithMany()
+                        .HasForeignKey("TvShowId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
