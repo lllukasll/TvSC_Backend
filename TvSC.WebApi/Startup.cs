@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using NJsonSchema;
+using NSwag.AspNetCore;
+using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
@@ -95,6 +96,8 @@ namespace TvSC.WebApi
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization();
 
+            services.AddSwagger();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -107,7 +110,33 @@ namespace TvSC.WebApi
             app.UseCors("CorsPolicy");
             app.UseMvc();
 
-            
+            app.UseSwaggerUi3WithApiExplorer(settings =>
+            {
+                settings.GeneratorSettings.DefaultPropertyNameHandling =
+                    PropertyNameHandling.CamelCase;
+            });
+
+            app.UseSwaggerWithApiExplorer(settings =>
+            {
+                settings.PostProcess = document =>
+                {
+                    document.Info.Version = "v1";
+                    document.Info.Title = "TvSC API";
+                    document.Info.Description = "Tv Show Calendar API";
+                    document.Info.TermsOfService = "None";
+                    document.Info.Contact = new NSwag.SwaggerContact
+                    {
+                        Name = "Łukasz Biedrzycki",
+                        Email = "L.Biedr@gmail.com",
+                        Url = string.Empty
+                    };
+                    document.Info.License = new NSwag.SwaggerLicense
+                    {
+                        Name = "Use under LICX",
+                        Url = "https://example.com/license"
+                    };
+                };
+            });
 
             app.UseStaticFiles();
         }
