@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TvSC.Data.DbModels
 {
-    public class TvSeriesRating : BaseModel
+    public class TvSeriesUserRating : BaseModel
     {
         public int Story { get; set; }
         public int Music { get; set; }

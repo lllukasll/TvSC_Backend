@@ -32,7 +32,7 @@ namespace TvSC.Services.Services
                 return response;
             }
 
-            var episodes = _episodeRepository.GetAllBy(x => x.AiringDate.Month == monthNumber, x => x.Season, x => x.Season.TvShow);
+            var episodes = _episodeRepository.GetAllBy(x => x.AiringDate.Month == monthNumber, x => x.Season, x => x.Season.TvShow, x => x.Season.TvShow.TvSeriesRatings);
             
             var mappedEpisodes = new List<ReturnEpisodeDto>();
 

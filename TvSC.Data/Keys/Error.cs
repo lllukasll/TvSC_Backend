@@ -33,5 +33,13 @@ namespace TvSC.Data.Keys
         public const string episode_Deleting = "Wystąpił problem podczas usuwania odcinka";
 
         public const string calendar_Wrong_Month = "Numer miesiąca musi być między 1 i 12";
+
+        public const string rating_Adding = "Wystąpił problem podczas dodawania oceny";
+        public const string rating_Already_Added = "Już dodałeś ocenę dla tego serialu";
+        public const string rating_NotFound = "Ocena o podanym id nie istnieje";
+        public const string rating_User_Not_Assigned = "Zalogowany użytkownik nie jest autorem oceny o podanym id";
+        public const string rating_Updating = "Wystąpił problem podczas edytowania oceny";
+        public const string rating_Deleting = "Wystąpił problem podczas usuwania oceny";
+        public const string rating_Not_Added = "Użytkownik nie dodał jeszcze oceny";
     }
 }

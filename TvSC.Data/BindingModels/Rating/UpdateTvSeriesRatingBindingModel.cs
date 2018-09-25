@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TvSC.Data.BindingModels.Rating
 {
-    public class AddTvSeriesRatingBindingModel
+    public class UpdateTvSeriesRatingBindingModel
     {
         public int Story { get; set; }
         public int Music { get; set; }

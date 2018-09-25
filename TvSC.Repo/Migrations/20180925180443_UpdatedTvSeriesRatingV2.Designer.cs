@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TvSC.Repo;
 
 namespace TvSC.Repo.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20180925180443_UpdatedTvSeriesRatingV2")]
+    partial class UpdatedTvSeriesRatingV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,31 +61,7 @@ namespace TvSC.Repo.Migrations
                     b.ToTable("Seasons");
                 });
 
-            modelBuilder.Entity("TvSC.Data.DbModels.TvSeriesRatings", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Average");
-
-                    b.Property<int>("Effects");
-
-                    b.Property<int>("Music");
-
-                    b.Property<int>("Story");
-
-                    b.Property<int>("TvShowId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TvShowId")
-                        .IsUnique();
-
-                    b.ToTable("TvSeriesRatings");
-                });
-
-            modelBuilder.Entity("TvSC.Data.DbModels.TvSeriesUserRating", b =>
+            modelBuilder.Entity("TvSC.Data.DbModels.TvSeriesRating", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -107,7 +85,7 @@ namespace TvSC.Repo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TvSeriesUserRatings");
+                    b.ToTable("TvSeriesRatings");
                 });
 
             modelBuilder.Entity("TvSC.Data.DbModels.TvShow", b =>
@@ -184,18 +162,10 @@ namespace TvSC.Repo.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("TvSC.Data.DbModels.TvSeriesRatings", b =>
+            modelBuilder.Entity("TvSC.Data.DbModels.TvSeriesRating", b =>
                 {
                     b.HasOne("TvSC.Data.DbModels.TvShow", "TvShow")
-                        .WithOne("TvSeriesRatings")
-                        .HasForeignKey("TvSC.Data.DbModels.TvSeriesRatings", "TvShowId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("TvSC.Data.DbModels.TvSeriesUserRating", b =>
-                {
-                    b.HasOne("TvSC.Data.DbModels.TvShow", "TvShow")
-                        .WithMany("TvSeriesUserRatings")
+                        .WithMany("TvSeriesRatings")
                         .HasForeignKey("TvShowId")
                         .OnDelete(DeleteBehavior.Cascade);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TvSC.Data.DtoModels.Rating;
 using TvSC.Data.DtoModels.Season;
 
 namespace TvSC.Data.DtoModels.TvShow
@@ -13,5 +14,6 @@ namespace TvSC.Data.DtoModels.TvShow
         public int EpisodeLength { get; set; }
         public string EmissionHour { get; set; }
         public ICollection<SeasonDto> Seasons { get; set; }
+        public TvSeriesRatingsDto TvSeriesRatings { get; set; }
     }
 }

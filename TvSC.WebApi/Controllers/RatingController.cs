@@ -20,11 +20,64 @@ namespace TvSC.WebApi.Controllers
         }
 
         [Authorize]
-        [HttpPost("{tvSeriesId}")]
+        [HttpPost("tvSeries/{tvSeriesId}")]
         public async Task<IActionResult> AddTvSeriesRating(int tvSeriesId, [FromBody] AddTvSeriesRatingBindingModel tvSeriesRatingBindingModel)
         {
             var user = User.Identity.Name;
-            var result = await _ratingService.AddTvSeriesRating(user, tvSeriesRatingBindingModel);
+            var result = await _ratingService.AddTvSeriesUserRating(user, tvSeriesId, tvSeriesRatingBindingModel);
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("tvSeries/{tvSeriesId}")]
+        public async Task<IActionResult> GetTvSeriesRating(int tvSeriesId)
+        {
+            var result = await _ratingService.GetTvSeriesRating(tvSeriesId);
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("tvSeries/{tvSeriesId}/forUser")]
+        public async Task<IActionResult> GetTvSeriesRatingForUser(int tvSeriesId)
+        {
+            var user = User.Identity.Name;
+            var result = await _ratingService.GetTvSeriesRatingForUser(user, tvSeriesId);
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPut("{ratingId}")]
+        public async Task<IActionResult> UpdateTvSeriesRating(int ratingId,
+            [FromBody] UpdateTvSeriesRatingBindingModel tvSeriesRatingBindingModel)
+        {
+            var user = User.Identity.Name;
+            var result = await _ratingService.UpdateTvSeriesUserRating(user, ratingId, tvSeriesRatingBindingModel);
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpDelete("{ratingId}")]
+        public async Task<IActionResult> DeletetvSeriesRating(int ratingId)
+        {
+            var result = await _ratingService.DeleteTvSeriesUserRating(ratingId);
             if (result.ErrorOccurred)
             {
                 return BadRequest(result);

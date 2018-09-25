@@ -6,10 +6,12 @@ using System.Transactions;
 using AutoMapper;
 using TvSC.Data.BindingModels;
 using TvSC.Data.BindingModels.Episode;
+using TvSC.Data.BindingModels.Rating;
 using TvSC.Data.BindingModels.Season;
 using TvSC.Data.BindingModels.TvShow;
 using TvSC.Data.DbModels;
 using TvSC.Data.DtoModels.Episodes;
+using TvSC.Data.DtoModels.Rating;
 using TvSC.Data.DtoModels.Season;
 using TvSC.Data.DtoModels.TvShow;
 
@@ -38,7 +40,13 @@ namespace TvSC.WebApi.Helpers
             CreateMap<Episode, UpdateEpisodeBindingModel>().ReverseMap();
             CreateMap<Episode, ReturnEpisodeDto>()
                 .ForMember(dest => dest.SeasonNumber, opt => opt.MapFrom(x => x.SeasonNumber))
-                .ForPath(dest => dest.TvShowName, opt => opt.MapFrom(x => x.Season.TvShow.Name));
+                .ForPath(dest => dest.TvShowName, opt => opt.MapFrom(x => x.Season.TvShow.Name))
+                .ForPath(dest => dest.TvSeriesRatings, opt => opt.MapFrom(x => x.Season.TvShow.TvSeriesRatings));
+
+            CreateMap<AddTvSeriesRatingBindingModel, TvSeriesUserRating>();
+            CreateMap<UpdateTvSeriesRatingBindingModel, TvSeriesUserRating>();
+            CreateMap<TvSeriesUserRating, GetTvSeriesRatingDto>();
+            CreateMap<TvSeriesRatings, GetTvSeriesRatingDto>();
         }
     }
 }

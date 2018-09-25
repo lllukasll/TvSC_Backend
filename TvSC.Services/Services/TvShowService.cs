@@ -29,7 +29,7 @@ namespace TvSC.Services.Services
         {
             var response = new ResponsesDto<TvShowResponse>();
 
-            var tvShows = await _tvShowRepository.GetAll().ToListAsync();
+            var tvShows = await _tvShowRepository.GetAll(x => x.TvSeriesRatings).ToListAsync();
             var mappedTvShows = new List<TvShowResponse>();
 
             foreach (var tvShow in tvShows)
@@ -53,7 +53,7 @@ namespace TvSC.Services.Services
                 return response;
             }
 
-            var tvSeries = await _tvShowRepository.GetByAsync(x => x.Id == tvSeriesId, x => x.Seasons);
+            var tvSeries = await _tvShowRepository.GetByAsync(x => x.Id == tvSeriesId, x => x.Seasons, x => x.TvSeriesRatings);
             await _tvShowRepository.LoadRelatedCollection(tvSeries, x => x.Seasons, x => x.Episodes);
             var mappedTvSeries = _mapper.Map<TvShowResponse>(tvSeries);
 

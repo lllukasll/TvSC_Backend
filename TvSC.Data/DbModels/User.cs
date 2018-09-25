@@ -12,6 +12,6 @@ namespace TvSC.Data.DbModels
         public override string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public virtual ICollection<TvSeriesRating> TvSeriesRatings { get; set; }
+        public virtual ICollection<TvSeriesUserRating> TvSeriesRatings { get; set; }
     }
 }
