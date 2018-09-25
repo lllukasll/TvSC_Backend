@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TvSC.Repo;
 
 namespace TvSC.Repo.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20180925104322_AddedTvSeriesRatingModel")]
+    partial class AddedTvSeriesRatingModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,35 +59,6 @@ namespace TvSC.Repo.Migrations
                     b.HasIndex("TvShowId");
 
                     b.ToTable("Seasons");
-                });
-
-            modelBuilder.Entity("TvSC.Data.DbModels.TvSeriesRating", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Average");
-
-                    b.Property<int>("Effects");
-
-                    b.Property<int>("Music");
-
-                    b.Property<int>("Story");
-
-                    b.Property<int>("TvShowId");
-
-                    b.Property<int>("UserId");
-
-                    b.Property<string>("UserId1");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TvShowId");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("TvSeriesRatings");
                 });
 
             modelBuilder.Entity("TvSC.Data.DbModels.TvShow", b =>
@@ -160,18 +133,6 @@ namespace TvSC.Repo.Migrations
                         .WithMany("Seasons")
                         .HasForeignKey("TvShowId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("TvSC.Data.DbModels.TvSeriesRating", b =>
-                {
-                    b.HasOne("TvSC.Data.DbModels.TvShow", "TvShow")
-                        .WithMany("TvSeriesRatings")
-                        .HasForeignKey("TvShowId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("TvSC.Data.DbModels.User", "User")
-                        .WithMany("TvSeriesRatings")
-                        .HasForeignKey("UserId1");
                 });
 #pragma warning restore 612, 618
         }

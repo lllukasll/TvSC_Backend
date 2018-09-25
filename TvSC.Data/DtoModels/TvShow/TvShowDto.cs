@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TvSC.Data.DbModels
+namespace TvSC.Data.DtoModels.TvShow
 {
-    public class TvShow : BaseModel
+    public class TvShowDto
     {
         public string Name { get; set; }
         public string Description { get; set; }
         public string Network { get; set; }
         public int EpisodeLength { get; set; }
         public string EmissionHour { get; set; }
-        public ICollection<Season> Seasons { get; set; }
-        public virtual ICollection<TvSeriesRating> TvSeriesRatings { get; set; }
     }
 }

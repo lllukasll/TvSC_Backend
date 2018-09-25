@@ -46,6 +46,7 @@ namespace TvSC.WebApi
             services.AddTransient<ITvShowService, TvShowService>();
             services.AddTransient<ISeasonService, SeasonService>();
             services.AddTransient<IEpisodeService, EpisodeService>();
+            services.AddTransient<ICalendarService, CalendarService>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             services.AddIdentityCore<User>(options => { });

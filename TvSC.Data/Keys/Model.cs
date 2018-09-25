@@ -11,5 +11,6 @@ namespace TvSC.Data.Keys
         public const string TvShow = "Tv Show";
         public const string Season = "Season";
         public const string Episode = "Episode";
+        public const string Calendar = "Calendar";
     }
 }

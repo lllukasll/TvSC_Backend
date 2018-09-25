@@ -31,5 +31,7 @@ namespace TvSC.Data.Keys
         public const string episode_NotFound = "Odcinek o podanym Id nie istnieje";
         public const string episode_Updating = "Wystąpił problem podczas edycji odcinka";
         public const string episode_Deleting = "Wystąpił problem podczas usuwania odcinka";
+
+        public const string calendar_Wrong_Month = "Numer miesiąca musi być między 1 i 12";
     }
 }

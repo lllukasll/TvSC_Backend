@@ -27,6 +27,7 @@ namespace TvSC.WebApi.Helpers
             CreateMap<TvShow, AddTvShowBindingModel>().ReverseMap();
             CreateMap<TvShow, UpdateTvShowBindingModel>().ReverseMap();
             CreateMap<TvShow, TvShowResponse>().ReverseMap();
+            CreateMap<TvShow, TvShowDto>().ReverseMap();
 
             CreateMap<Season, SeasonResponse>().ReverseMap();
             CreateMap<Season, SeasonResponseDto>().ReverseMap();
@@ -35,6 +36,9 @@ namespace TvSC.WebApi.Helpers
             CreateMap<Episode, EpisodeDto>().ReverseMap();
             CreateMap<Episode, AddEpisodeBindingModel>().ReverseMap();
             CreateMap<Episode, UpdateEpisodeBindingModel>().ReverseMap();
+            CreateMap<Episode, ReturnEpisodeDto>()
+                .ForMember(dest => dest.SeasonNumber, opt => opt.MapFrom(x => x.SeasonNumber))
+                .ForPath(dest => dest.TvShowName, opt => opt.MapFrom(x => x.Season.TvShow.Name));
         }
     }
 }
