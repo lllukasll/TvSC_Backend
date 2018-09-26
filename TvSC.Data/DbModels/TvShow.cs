@@ -14,5 +14,6 @@ namespace TvSC.Data.DbModels
         public ICollection<Season> Seasons { get; set; }
         public virtual ICollection<TvSeriesUserRating> TvSeriesUserRatings { get; set; }
         public virtual TvSeriesRatings TvSeriesRatings { get; set; }
+        public virtual ICollection<UserFavouriteTvShows> UserFavouriteTvShows { get; set; }
     }
 }

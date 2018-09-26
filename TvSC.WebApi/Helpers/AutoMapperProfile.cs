@@ -11,6 +11,7 @@ using TvSC.Data.BindingModels.Season;
 using TvSC.Data.BindingModels.TvShow;
 using TvSC.Data.DbModels;
 using TvSC.Data.DtoModels.Episodes;
+using TvSC.Data.DtoModels.FavouriteTvSeries;
 using TvSC.Data.DtoModels.Rating;
 using TvSC.Data.DtoModels.Season;
 using TvSC.Data.DtoModels.TvShow;
@@ -47,6 +48,9 @@ namespace TvSC.WebApi.Helpers
             CreateMap<UpdateTvSeriesRatingBindingModel, TvSeriesUserRating>();
             CreateMap<TvSeriesUserRating, GetTvSeriesRatingDto>();
             CreateMap<TvSeriesRatings, GetTvSeriesRatingDto>();
+
+            CreateMap<UserFavouriteTvShows, FavouriteTvSeriesResponseDto>();
+
         }
     }
 }

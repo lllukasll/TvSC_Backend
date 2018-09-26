@@ -13,5 +13,6 @@ namespace TvSC.Data.Keys
         public const string Episode = "Episode";
         public const string Calendar = "Calendar";
         public const string Rating = "Rating";
+        public const string FavouriteTvShow = "FavouriteTvShow";
     }
 }

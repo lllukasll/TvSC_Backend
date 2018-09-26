@@ -19,11 +19,16 @@ namespace TvSC.Repo
         public DbSet<Season> Seasons { get; set; }
         public DbSet<TvSeriesUserRating> TvSeriesUserRatings { get; set; }
         public DbSet<TvSeriesRatings> TvSeriesRatings { get; set; }
+        public DbSet<UserFavouriteTvShows> UserFavouriteTvShows { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<User>()
                 .HasMany(b => b.TvSeriesRatings)
+                .WithOne(b => b.User);
+
+            builder.Entity<User>()
+                .HasMany(b => b.UserFavouriteTvShows)
                 .WithOne(b => b.User);
 
             builder.Entity<User>()
@@ -33,6 +38,10 @@ namespace TvSC.Repo
 
             builder.Entity<TvShow>()
                 .HasMany(x => x.Seasons);
+
+            builder.Entity<TvShow>()
+                .HasMany(b => b.UserFavouriteTvShows)
+                .WithOne(b => b.TvShow);
 
             builder.Entity<TvShow>()
                 .HasMany(b => b.TvSeriesUserRatings)
@@ -46,8 +55,7 @@ namespace TvSC.Repo
 
             builder.Entity<Episode>()
                 .HasOne(b => b.Season);   
-            
-                
+               
 
             base.OnModelCreating(builder);
         }

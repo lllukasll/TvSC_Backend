@@ -41,5 +41,9 @@ namespace TvSC.Data.Keys
         public const string rating_Updating = "Wystąpił problem podczas edytowania oceny";
         public const string rating_Deleting = "Wystąpił problem podczas usuwania oceny";
         public const string rating_Not_Added = "Użytkownik nie dodał jeszcze oceny";
+
+        public const string favouriteTvShow_Adding = "Wystąpił problem podczas dodawania serialu do ulubionych";
+        public const string favouriteTvShow_Already_Exists = "Serial o podanym id został już dodany do ulubionych";
+        public const string favouriteTvShow_Deleting = "Wystąpił problem podczas usuwania serialu z ulubionych";
     }
 }

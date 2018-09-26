@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TvSC.Repo;
 
 namespace TvSC.Repo.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20180926132908_AddedUserFavouriteTvShowsTableV2")]
+    partial class AddedUserFavouriteTvShowsTableV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,13 +178,15 @@ namespace TvSC.Repo.Migrations
 
                     b.Property<int>("TvShowId");
 
-                    b.Property<string>("UserId");
+                    b.Property<int>("UserId");
+
+                    b.Property<string>("UserId1");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TvShowId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("UserFavouriteTvShows");
                 });
@@ -232,7 +236,7 @@ namespace TvSC.Repo.Migrations
 
                     b.HasOne("TvSC.Data.DbModels.User", "User")
                         .WithMany("UserFavouriteTvShows")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId1");
                 });
 #pragma warning restore 612, 618
         }
