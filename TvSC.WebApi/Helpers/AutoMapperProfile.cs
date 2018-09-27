@@ -51,6 +51,8 @@ namespace TvSC.WebApi.Helpers
 
             CreateMap<UserFavouriteTvShows, FavouriteTvSeriesResponseDto>();
 
+            //CreateMap<UserWatchedEpisode, watched>();
+
         }
     }
 }

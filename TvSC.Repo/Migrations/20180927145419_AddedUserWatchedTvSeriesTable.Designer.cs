@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TvSC.Repo;
 
 namespace TvSC.Repo.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20180927145419_AddedUserWatchedTvSeriesTable")]
+    partial class AddedUserWatchedTvSeriesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,19 +189,19 @@ namespace TvSC.Repo.Migrations
                     b.ToTable("UserFavouriteTvShows");
                 });
 
-            modelBuilder.Entity("TvSC.Data.DbModels.UserWatchedEpisode", b =>
+            modelBuilder.Entity("TvSC.Data.DbModels.UserWatchedTvSeries", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("EpisodeId");
+                    b.Property<int>("TvShowId");
 
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EpisodeId");
+                    b.HasIndex("TvShowId");
 
                     b.HasIndex("UserId");
 
@@ -254,15 +256,15 @@ namespace TvSC.Repo.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("TvSC.Data.DbModels.UserWatchedEpisode", b =>
+            modelBuilder.Entity("TvSC.Data.DbModels.UserWatchedTvSeries", b =>
                 {
-                    b.HasOne("TvSC.Data.DbModels.Episode", "Episode")
+                    b.HasOne("TvSC.Data.DbModels.TvShow", "TvShow")
                         .WithMany()
-                        .HasForeignKey("EpisodeId")
+                        .HasForeignKey("TvShowId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TvSC.Data.DbModels.User", "User")
-                        .WithMany("UserWatchedEpisodes")
+                        .WithMany("UserWatchedTvSeries")
                         .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618

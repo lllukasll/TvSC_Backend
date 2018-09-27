@@ -45,5 +45,9 @@ namespace TvSC.Data.Keys
         public const string favouriteTvShow_Adding = "Wystąpił problem podczas dodawania serialu do ulubionych";
         public const string favouriteTvShow_Already_Exists = "Serial o podanym id został już dodany do ulubionych";
         public const string favouriteTvShow_Deleting = "Wystąpił problem podczas usuwania serialu z ulubionych";
+
+        public const string watchedTvShow_Adding = "Wystąpił problem podczas dodawanie odcinka do objerzanych";
+        public const string watchedEpisode_Already_Exists = "Odcinek o podanym id został już dodany do obejrzanych";
+        public const string watchedEpisode_Deleting = "Wystąpił problem podczas usuwania odcinka z objerzanych";
     }
 }

@@ -20,6 +20,7 @@ namespace TvSC.Repo
         public DbSet<TvSeriesUserRating> TvSeriesUserRatings { get; set; }
         public DbSet<TvSeriesRatings> TvSeriesRatings { get; set; }
         public DbSet<UserFavouriteTvShows> UserFavouriteTvShows { get; set; }
+        public DbSet<UserWatchedEpisode> UserWatchedTvSeries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -29,6 +30,10 @@ namespace TvSC.Repo
 
             builder.Entity<User>()
                 .HasMany(b => b.UserFavouriteTvShows)
+                .WithOne(b => b.User);
+
+            builder.Entity<User>()
+                .HasMany(b => b.UserWatchedEpisodes)
                 .WithOne(b => b.User);
 
             builder.Entity<User>()

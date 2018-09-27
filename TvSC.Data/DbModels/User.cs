@@ -14,5 +14,6 @@ namespace TvSC.Data.DbModels
         public string LastName { get; set; }
         public virtual ICollection<TvSeriesUserRating> TvSeriesRatings { get; set; }
         public virtual ICollection<UserFavouriteTvShows> UserFavouriteTvShows { get; set; }
+        public virtual ICollection<UserWatchedEpisode> UserWatchedEpisodes { get; set; }
     }
 }
