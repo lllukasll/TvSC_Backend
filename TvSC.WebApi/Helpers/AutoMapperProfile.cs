@@ -15,6 +15,7 @@ using TvSC.Data.DtoModels.FavouriteTvSeries;
 using TvSC.Data.DtoModels.Rating;
 using TvSC.Data.DtoModels.Season;
 using TvSC.Data.DtoModels.TvShow;
+using TvSC.Data.DtoModels.WatchedEpisodes;
 
 namespace TvSC.WebApi.Helpers
 {
@@ -51,6 +52,8 @@ namespace TvSC.WebApi.Helpers
 
             CreateMap<UserFavouriteTvShows, FavouriteTvSeriesResponseDto>();
 
+            CreateMap<UserWatchedEpisode, WatchedEpisodesResponseDto>()
+                .ForPath(dest => dest.WatchedTvSeriesEpisodes, opt => opt.MapFrom(x => x.Episode.Season.TvShow));
             //CreateMap<UserWatchedEpisode, watched>();
 
         }

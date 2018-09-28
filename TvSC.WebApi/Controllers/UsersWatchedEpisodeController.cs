@@ -7,6 +7,7 @@ using TvSC.Services.Interfaces;
 
 namespace TvSC.WebApi.Controllers
 {
+    [Route("UserWatchedEpisodes")]
     public class UsersWatchedEpisodeController : Controller
     {
         private readonly IUserWatchedEpisodeService _userWatchedEpisodeService;
@@ -14,6 +15,32 @@ namespace TvSC.WebApi.Controllers
         public UsersWatchedEpisodeController(IUserWatchedEpisodeService userWatchedEpisodeService)
         {
             _userWatchedEpisodeService = userWatchedEpisodeService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserWatchedEpisodes()
+        {
+            var user = User.Identity.Name;
+            var response = await _userWatchedEpisodeService.GetUserWatchedEpisodes(user);
+            if (response.ErrorOccurred)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet("forTvSeries/{tvSeriesId}")]
+        public async Task<IActionResult> GetUserWatchedEpisodesForTvSeries(int tvSeriesId)
+        {
+            var user = User.Identity.Name;
+            var response = await _userWatchedEpisodeService.GetUserWatchedEpisodesForTvSeries(user, tvSeriesId);
+            if (response.ErrorOccurred)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
         }
 
         [HttpPost("{episodeId}")]

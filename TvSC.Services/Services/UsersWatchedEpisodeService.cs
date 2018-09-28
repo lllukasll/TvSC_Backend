@@ -6,6 +6,7 @@ using AutoMapper;
 using TvSC.Data.DbModels;
 using TvSC.Data.DtoModels;
 using TvSC.Data.DtoModels.FavouriteTvSeries;
+using TvSC.Data.DtoModels.WatchedEpisodes;
 using TvSC.Data.Keys;
 using TvSC.Repo.Interfaces;
 using TvSC.Services.Interfaces;
@@ -23,6 +24,40 @@ namespace TvSC.Services.Services
             _userWatchedEpisodeRepository = userWatchedEpisodeRepository;
             _episodeRepository = episodeRepository;
             _mapper = mapper;
+        }
+
+        public async Task<ResponsesDto<WatchedEpisodesResponseDto>> GetUserWatchedEpisodesForTvSeries(string userId, int tvSeriesId)
+        {
+            var response = new ResponsesDto<WatchedEpisodesResponseDto>();
+
+            var watchedEpisodesList = _userWatchedEpisodeRepository.GetAllBy(x => x.UserId == userId && x.Episode.Season.TvShowId == tvSeriesId, x => x.Episode.Season.TvShow);
+            List<WatchedEpisodesResponseDto> mappedEpisodesList = new List<WatchedEpisodesResponseDto>();
+
+            foreach (var watchedEpisode in watchedEpisodesList)
+            {
+                mappedEpisodesList.Add(_mapper.Map<WatchedEpisodesResponseDto>(watchedEpisode));
+            }
+
+            response.DtoObject = mappedEpisodesList;
+
+            return response;
+        }
+
+        public async Task<ResponsesDto<WatchedEpisodesResponseDto>> GetUserWatchedEpisodes(string userId)
+        {
+            var response = new ResponsesDto<WatchedEpisodesResponseDto>();
+
+            var watchedEpisodesList = _userWatchedEpisodeRepository.GetAllBy(x => x.UserId == userId, x => x.Episode.Season.TvShow);
+            List<WatchedEpisodesResponseDto> mappedEpisodesList = new List<WatchedEpisodesResponseDto>();
+
+            foreach (var watchedEpisode in watchedEpisodesList)
+            {
+                mappedEpisodesList.Add(_mapper.Map<WatchedEpisodesResponseDto>(watchedEpisode));
+            }
+
+            response.DtoObject = mappedEpisodesList;
+
+            return response;
         }
 
         public async Task<ResponseDto<BaseModelDto>> AddUserFavouriteTvSeries(int episodeId, string userId)
