@@ -51,6 +51,10 @@ namespace TvSC.WebApi
             services.AddTransient<IRatingService, RatingService>();
             services.AddTransient<IUserWatchedEpisodeService, UsersWatchedEpisodeService>();
             services.AddTransient<IUserFavouriteTvShowsService, UserFavouriteTvShowsService>();
+            services.AddTransient<IActorService, ActorService>();
+            services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IActorAssignmentService, ActorsAssignmentsService>();
+            services.AddTransient<ITvShowCategoriesAssignmentsService, TvShowCategoriesAssignmentsService>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             services.AddIdentityCore<User>(options => { });

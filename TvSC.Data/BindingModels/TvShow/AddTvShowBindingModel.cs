@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 using TvSC.Data.Keys;
 
 namespace TvSC.Data.BindingModels.TvShow
@@ -14,5 +15,6 @@ namespace TvSC.Data.BindingModels.TvShow
         public string Network { get; set; }
         public int EpisodeLength { get; set; }
         public string EmissionHour { get; set; }
+        public IFormFile Photo { get; set; }
     }
 }

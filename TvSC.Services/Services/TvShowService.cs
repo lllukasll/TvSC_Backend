@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,10 +19,14 @@ namespace TvSC.Services.Services
     public class TvShowService : ITvShowService
     {
         private readonly IRepository<TvShow> _tvShowRepository;
+        private readonly IActorAssignmentService _actorAssignmentService;
+        private readonly ITvShowCategoriesAssignmentsService _tvShowCategoriesAssignmentsService;
         private readonly IMapper _mapper;
-        public TvShowService(IRepository<TvShow> tvShowRepository, IMapper mapper)
+        public TvShowService(IRepository<TvShow> tvShowRepository, IActorAssignmentService actorAssignmentService, ITvShowCategoriesAssignmentsService tvShowCategoriesAssignmentsService, IMapper mapper)
         {
             _tvShowRepository = tvShowRepository;
+            _actorAssignmentService = actorAssignmentService;
+            _tvShowCategoriesAssignmentsService = tvShowCategoriesAssignmentsService;
             _mapper = mapper;
         }
 
@@ -29,12 +34,19 @@ namespace TvSC.Services.Services
         {
             var response = new ResponsesDto<TvShowResponse>();
 
-            var tvShows = await _tvShowRepository.GetAll(x => x.TvSeriesRatings).ToListAsync();
+            var tvShows = await _tvShowRepository.GetAll(x => x.TvSeriesRatings, x => x.Seasons).ToListAsync();
             var mappedTvShows = new List<TvShowResponse>();
 
             foreach (var tvShow in tvShows)
             {
-                mappedTvShows.Add(_mapper.Map<TvShowResponse>(tvShow));
+                var assignments = await _actorAssignmentService.GetTvShowAssignments(tvShow.Id);
+                var mappedTvShow = _mapper.Map<TvShowResponse>(tvShow);
+
+                var categoryAssignments = await _tvShowCategoriesAssignmentsService.GetTvShowsCategories(tvShow.Id);
+
+                mappedTvShow.Actors = assignments.DtoObject;
+                mappedTvShow.Categories = categoryAssignments.DtoObject;
+                mappedTvShows.Add(mappedTvShow);
             }
 
             response.DtoObject = mappedTvShows;
@@ -65,7 +77,19 @@ namespace TvSC.Services.Services
         public async Task<ResponseDto<BaseModelDto>> AddTvShow(AddTvShowBindingModel tvShowBindingModel)
         {
             var response = new ResponseDto<BaseModelDto>();
+            if (!Directory.Exists("wwwroot\\TvShowsPictures"))
+                Directory.CreateDirectory("wwwroot\\TvShowsPictures");
+
+            var fileName = Guid.NewGuid() + Path.GetExtension(tvShowBindingModel.Photo.FileName);
+            var filePath = Path.Combine("wwwroot\\TvShowsPictures", fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await tvShowBindingModel.Photo.CopyToAsync(stream);
+            }
+
             var tvShow = _mapper.Map<TvShow>(tvShowBindingModel);
+            tvShow.PhotoName = fileName;
 
             var tvShowInDatabase = await _tvShowRepository.GetByAsync(x => x.Name.ToLower() == tvShowBindingModel.Name.ToLower());
             if (tvShowInDatabase != null)

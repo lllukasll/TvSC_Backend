@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TvSC.Repo;
 
 namespace TvSC.Repo.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20181109142728_addedTvShowCategoryAssignmentsTable")]
+    partial class addedTvShowCategoryAssignmentsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,8 +66,6 @@ namespace TvSC.Repo.Migrations
                     b.Property<string>("Name");
 
                     b.Property<int?>("TvShowId");
-
-                    b.Property<string>("Type");
 
                     b.HasKey("Id");
 
@@ -180,8 +180,6 @@ namespace TvSC.Repo.Migrations
                     b.Property<string>("Name");
 
                     b.Property<string>("Network");
-
-                    b.Property<string>("PhotoName");
 
                     b.HasKey("Id");
 

@@ -49,5 +49,24 @@ namespace TvSC.Data.Keys
         public const string watchedTvShow_Adding = "Wystąpił problem podczas dodawanie odcinka do objerzanych";
         public const string watchedEpisode_Already_Exists = "Odcinek o podanym id został już dodany do obejrzanych";
         public const string watchedEpisode_Deleting = "Wystąpił problem podczas usuwania odcinka z objerzanych";
+
+        public const string actor_Adding = "Wystąpił problem podczas dodawania aktora";
+        public const string actor_NotExists = "Aktor o podanym id nie istnieje";
+        public const string actor_Deleting = "Wystąpił problem podczas usuwania aktora";
+        public const string actor_Assignment_Exists = "Aktor o podanym id jest już przypisany do tego serialu";
+        public const string actor_Assignment_NotExists = "Aktor o podanym id nie jest przypisany do tego serialu";
+
+        public const string assignment_Adding = "Wystąpił problem podczas przypisywania aktora do serialu";
+        public const string assingment_Not_Exists = "Przypisanie o podanym id nie istnieje";
+        public const string assignment_Deleting = "Wystąpił problem podczas usuwania przypisania";
+
+        public const string category_Already_Exists = "Kategoria o podanej nazwie już istnieje";
+        public const string category_Adding = "Wystąpił problem podczas dodawania kategorii";
+        public const string category_NotFound = "Kategoria o podanym id nie istnieje";
+
+        public const string categoryAssignment_Already_Exists = "Dana kategoria została już przypisana do tego serialu";
+        public const string categoryAssignment_Adding = "Wystąpił problem podczas przypisywania kategorii do serialu";
+        public const string categoryAssignment_NotFound = "Podane przypisanie kategorii do serialu nie istnieje";
+        public const string categoryAssignment_Deleting = "Wystąpił problem podczas usuwania przypisania kategorii";
     }
 }

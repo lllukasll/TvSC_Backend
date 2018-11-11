@@ -5,11 +5,14 @@ using System.Threading.Tasks;
 using System.Transactions;
 using AutoMapper;
 using TvSC.Data.BindingModels;
+using TvSC.Data.BindingModels.Actor;
+using TvSC.Data.BindingModels.Category;
 using TvSC.Data.BindingModels.Episode;
 using TvSC.Data.BindingModels.Rating;
 using TvSC.Data.BindingModels.Season;
 using TvSC.Data.BindingModels.TvShow;
 using TvSC.Data.DbModels;
+using TvSC.Data.DtoModels.Category;
 using TvSC.Data.DtoModels.Episodes;
 using TvSC.Data.DtoModels.FavouriteTvSeries;
 using TvSC.Data.DtoModels.Rating;
@@ -54,6 +57,13 @@ namespace TvSC.WebApi.Helpers
 
             CreateMap<UserWatchedEpisode, WatchedEpisodesResponseDto>()
                 .ForPath(dest => dest.WatchedTvSeriesEpisodes, opt => opt.MapFrom(x => x.Episode.Season.TvShow));
+
+            CreateMap<AddActorBindingModel, Actor>()
+                .ForMember(dest => dest.Photo, opt => opt.Ignore());
+
+            CreateMap<AddCategoryBindingModel, Category>();
+
+            CreateMap<Category, CategoryResponse>();
             //CreateMap<UserWatchedEpisode, watched>();
 
         }

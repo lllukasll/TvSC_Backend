@@ -14,6 +14,9 @@ namespace TvSC.Repo
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Actor> Actors { get; set; }
+        public DbSet<TvShowCategoryAssignments> TvShowCategoryAssignmentsEntity { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<TvShow> TvShows { get; set; }
         public DbSet<Episode> Episodes { get; set; }
         public DbSet<Season> Seasons { get; set; }
@@ -45,6 +48,9 @@ namespace TvSC.Repo
                 .HasMany(x => x.Seasons);
 
             builder.Entity<TvShow>()
+                .HasMany(x => x.Categories);
+
+            builder.Entity<TvShow>()
                 .HasMany(b => b.UserFavouriteTvShows)
                 .WithOne(b => b.TvShow);
 
@@ -59,8 +65,19 @@ namespace TvSC.Repo
                 .HasMany(x => x.Episodes);
 
             builder.Entity<Episode>()
-                .HasOne(b => b.Season);   
-               
+                .HasOne(b => b.Season);
+
+            builder.Entity<ActorsAssignments>()
+                .HasOne(x => x.TvShow);
+
+            builder.Entity<ActorsAssignments>()
+                .HasOne(x => x.Actor);
+
+            builder.Entity<TvShowCategoryAssignments>()
+                .HasOne(x => x.TvShow);
+
+            builder.Entity<TvShowCategoryAssignments>()
+                .HasOne(x => x.Category);
 
             base.OnModelCreating(builder);
         }

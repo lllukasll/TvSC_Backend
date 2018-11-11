@@ -6,6 +6,7 @@ namespace TvSC.Data.DtoModels.TvShow
 {
     public class TvShowDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Network { get; set; }

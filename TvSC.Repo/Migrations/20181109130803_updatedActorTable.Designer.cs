@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TvSC.Repo;
 
 namespace TvSC.Repo.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20181109130803_updatedActorTable")]
+    partial class updatedActorTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,28 +33,13 @@ namespace TvSC.Repo.Migrations
 
                     b.Property<string>("Surname");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Actors");
-                });
-
-            modelBuilder.Entity("TvSC.Data.DbModels.ActorsAssignments", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ActorId");
-
                     b.Property<int?>("TvShowId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ActorId");
-
                     b.HasIndex("TvShowId");
 
-                    b.ToTable("ActorsAssignments");
+                    b.ToTable("Actors");
                 });
 
             modelBuilder.Entity("TvSC.Data.DbModels.Category", b =>
@@ -64,8 +51,6 @@ namespace TvSC.Repo.Migrations
                     b.Property<string>("Name");
 
                     b.Property<int?>("TvShowId");
-
-                    b.Property<string>("Type");
 
                     b.HasKey("Id");
 
@@ -171,6 +156,8 @@ namespace TvSC.Repo.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("ActorId");
+
                     b.Property<string>("Description");
 
                     b.Property<string>("EmissionHour");
@@ -181,30 +168,11 @@ namespace TvSC.Repo.Migrations
 
                     b.Property<string>("Network");
 
-                    b.Property<string>("PhotoName");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("ActorId");
 
                     b.ToTable("TvShows");
-                });
-
-            modelBuilder.Entity("TvSC.Data.DbModels.TvShowCategoryAssignments", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("CategoryId");
-
-                    b.Property<int?>("TvShowId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("TvShowId");
-
-                    b.ToTable("TvShowCategoryAssignmentsEntity");
                 });
 
             modelBuilder.Entity("TvSC.Data.DbModels.User", b =>
@@ -282,14 +250,10 @@ namespace TvSC.Repo.Migrations
                     b.ToTable("UserWatchedTvSeries");
                 });
 
-            modelBuilder.Entity("TvSC.Data.DbModels.ActorsAssignments", b =>
+            modelBuilder.Entity("TvSC.Data.DbModels.Actor", b =>
                 {
-                    b.HasOne("TvSC.Data.DbModels.Actor", "Actor")
-                        .WithMany()
-                        .HasForeignKey("ActorId");
-
-                    b.HasOne("TvSC.Data.DbModels.TvShow", "TvShow")
-                        .WithMany()
+                    b.HasOne("TvSC.Data.DbModels.TvShow")
+                        .WithMany("Actors")
                         .HasForeignKey("TvShowId");
                 });
 
@@ -336,15 +300,11 @@ namespace TvSC.Repo.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("TvSC.Data.DbModels.TvShowCategoryAssignments", b =>
+            modelBuilder.Entity("TvSC.Data.DbModels.TvShow", b =>
                 {
-                    b.HasOne("TvSC.Data.DbModels.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
-
-                    b.HasOne("TvSC.Data.DbModels.TvShow", "TvShow")
-                        .WithMany()
-                        .HasForeignKey("TvShowId");
+                    b.HasOne("TvSC.Data.DbModels.Actor")
+                        .WithMany("TvShows")
+                        .HasForeignKey("ActorId");
                 });
 
             modelBuilder.Entity("TvSC.Data.DbModels.UserFavouriteTvShows", b =>

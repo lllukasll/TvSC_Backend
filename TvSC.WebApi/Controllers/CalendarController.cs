@@ -17,10 +17,23 @@ namespace TvSC.WebApi.Controllers
             _calendarService = calendarService;
         }
 
-        [HttpGet("{monthNumber}")]
+        [HttpGet("month/{monthNumber}")]
         public async Task<IActionResult> GetMonthEpisodes(int monthNumber)
         {
             var result = await _calendarService.GetMonthEpisodes(monthNumber);
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("week")]
+        public async Task<IActionResult> GetWeekEpisodes()
+        {
+            var date = DateTime.Now;
+            var result = await _calendarService.GetWeekEpisodes(date);
             if (result.ErrorOccurred)
             {
                 return BadRequest(result);

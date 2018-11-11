@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using TvSC.Data.BindingModels.TvShow;
 using TvSC.Services.Interfaces;
@@ -15,9 +16,12 @@ namespace TvSC.WebApi.Controllers
     public class TvShowController : Controller
     {
         private readonly ITvShowService _tvShowService;
-        public TvShowController(ITvShowService tvShowService)
+        private readonly IHostingEnvironment _host;
+
+        public TvShowController(ITvShowService tvShowService, IHostingEnvironment host)
         {
             _tvShowService = tvShowService;
+            _host = host;
         }
 
         [HttpGet]
@@ -39,8 +43,19 @@ namespace TvSC.WebApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet("photo/{photoName}")]
+        public async Task<IActionResult> GetTvShowPhoto(string photoName)
+        {
+            if (photoName == null || photoName == "null")
+                return BadRequest();
+
+            var stream = _host.WebRootPath + "\\TvShowsPictures\\" + photoName;
+            var imageFileStream = System.IO.File.OpenRead(stream);
+            return File(imageFileStream, "image/jpeg");
+        }
+
         [HttpPost]
-        public async Task<IActionResult> AddTvShow([FromBody] AddTvShowBindingModel tvShowBindingModel)
+        public async Task<IActionResult> AddTvShow([FromForm] AddTvShowBindingModel tvShowBindingModel)
         {
             var result = await _tvShowService.AddTvShow(tvShowBindingModel);
             if (result.ErrorOccurred)

@@ -45,5 +45,13 @@ namespace TvSC.Services.Services
 
             return response;
         }
+
+        public async Task<ResponsesDto<ReturnEpisodeDto>> GetWeekEpisodes(DateTime date)
+        {
+            var response = new ResponsesDto<ReturnEpisodeDto>();
+            var day = date.DayOfWeek;
+
+            return response;
+        }
     }
 }
