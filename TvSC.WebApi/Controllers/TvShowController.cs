@@ -24,10 +24,10 @@ namespace TvSC.WebApi.Controllers
             _host = host;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetTvShows()
+        [HttpPost("getByParameters")]
+        public async Task<IActionResult> GetTvShows([FromBody] SearchByParameters parameters)
         {
-            var tvShows = await _tvShowService.GetAllTvShows();
+            var tvShows = await _tvShowService.GetAllTvShows(parameters);
             return Ok(tvShows);
         }
 

@@ -12,6 +12,7 @@ namespace TvSC.Data.DbModels
         public int EpisodeLength { get; set; }
         public string EmissionHour { get; set; }
         public string PhotoName { get; set; }
+        public int Status { get; set; }
         public ICollection<Season> Seasons { get; set; }
         public virtual ICollection<TvSeriesUserRating> TvSeriesUserRatings { get; set; }
         public virtual ICollection<Category> Categories { get; set; }

@@ -17,6 +17,7 @@ namespace TvSC.Data.DtoModels.TvShow
         public int EpisodeLength { get; set; }
         public string EmissionHour { get; set; }
         public string PhotoName { get; set; }
+        public int Status { get; set; }
         public ICollection<SeasonDto> Seasons { get; set; }
         public ICollection<ActorDto> Actors { get; set; }
         public ICollection<CategoryResponse> Categories { get; set; }
