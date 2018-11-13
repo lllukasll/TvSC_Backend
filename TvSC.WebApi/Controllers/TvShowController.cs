@@ -67,7 +67,7 @@ namespace TvSC.WebApi.Controllers
         }
 
         [HttpPut("{tvShowId}")]
-        public async Task<IActionResult> UpdateTvShow(int tvShowId,[FromBody] UpdateTvShowBindingModel tvShowBindingModel)
+        public async Task<IActionResult> UpdateTvShow(int tvShowId,[FromForm] UpdateTvShowBindingModel tvShowBindingModel)
         {
             var result = await _tvShowService.UpdateTvShow(tvShowId, tvShowBindingModel);
             if (result.ErrorOccurred)

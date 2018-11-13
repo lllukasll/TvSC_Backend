@@ -8,10 +8,12 @@ namespace TvSC.Data.DbModels
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public string LongDescription { get; set; }
         public string Network { get; set; }
         public int EpisodeLength { get; set; }
         public string EmissionHour { get; set; }
         public string PhotoName { get; set; }
+        public string BackgroundPhotoName { get; set; }
         public int Status { get; set; }
         public ICollection<Season> Seasons { get; set; }
         public virtual ICollection<TvSeriesUserRating> TvSeriesUserRatings { get; set; }

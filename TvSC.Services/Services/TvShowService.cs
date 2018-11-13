@@ -164,6 +164,12 @@ namespace TvSC.Services.Services
             await _tvShowRepository.LoadRelatedCollection(tvSeries, x => x.Seasons, x => x.Episodes);
             var mappedTvSeries = _mapper.Map<TvShowResponse>(tvSeries);
 
+            var assignments = await _actorAssignmentService.GetTvShowAssignments(tvSeriesId);
+            var categoryAssignments = await _tvShowCategoriesAssignmentsService.GetTvShowsCategories(tvSeriesId);
+
+            mappedTvSeries.Actors = assignments.DtoObject;
+            mappedTvSeries.Categories = categoryAssignments.DtoObject;
+
             response.DtoObject = mappedTvSeries;
 
             return response;
@@ -178,13 +184,22 @@ namespace TvSC.Services.Services
             var fileName = Guid.NewGuid() + Path.GetExtension(tvShowBindingModel.Photo.FileName);
             var filePath = Path.Combine("wwwroot\\TvShowsPictures", fileName);
 
+            var backgroundFileName = Guid.NewGuid() + Path.GetExtension(tvShowBindingModel.BackgroundPhoto.FileName);
+            var backgroundFilePath = Path.Combine("wwwroot\\TvShowsPictures", backgroundFileName);
+
             using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await tvShowBindingModel.Photo.CopyToAsync(stream);
+            }
+
+            using (var stream = new FileStream(backgroundFilePath, FileMode.Create))
             {
                 await tvShowBindingModel.Photo.CopyToAsync(stream);
             }
 
             var tvShow = _mapper.Map<TvShow>(tvShowBindingModel);
             tvShow.PhotoName = fileName;
+            tvShow.BackgroundPhotoName = backgroundFileName;
 
             var tvShowInDatabase = await _tvShowRepository.GetByAsync(x => x.Name.ToLower() == tvShowBindingModel.Name.ToLower());
             if (tvShowInDatabase != null)
@@ -213,10 +228,49 @@ namespace TvSC.Services.Services
                 return response;
             }
 
-            var tvSeries = _mapper.Map<TvShow>(tvShowBindingModel);
-            tvSeries.Id = id;
+            var tvSeriesFromDb = await _tvShowRepository.GetByAsync(x => x.Id == id, x => x.Categories, x => x.Seasons, x => x.TvSeriesRatings, x => x.TvSeriesUserRatings, x => x.UserFavouriteTvShows);
+            if (tvSeriesFromDb.PhotoName != null)
+            {
+                if (File.Exists(("wwwroot\\TvShowsPictures\\" + tvSeriesFromDb.PhotoName)))
+                {
+                    File.Delete("wwwroot\\TvShowsPictures\\" + tvSeriesFromDb.PhotoName);
+                }
+            }
 
-            var result = await _tvShowRepository.UpdateAsync(tvSeries);
+            if (tvSeriesFromDb.BackgroundPhotoName != null)
+            {
+                if (File.Exists(("wwwroot\\TvShowsPictures\\" + tvSeriesFromDb.BackgroundPhotoName)))
+                {
+                    File.Delete("wwwroot\\TvShowsPictures\\" + tvSeriesFromDb.BackgroundPhotoName);
+                }
+            }
+
+            var fileName = Guid.NewGuid() + Path.GetExtension(tvShowBindingModel.Photo.FileName);
+            var filePath = Path.Combine("wwwroot\\TvShowsPictures", fileName);
+
+            var backgroundFileName = Guid.NewGuid() + Path.GetExtension(tvShowBindingModel.BackgroundPhoto.FileName);
+            var backgroundFilePath = Path.Combine("wwwroot\\TvShowsPictures", backgroundFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await tvShowBindingModel.Photo.CopyToAsync(stream);
+            }
+
+            using (var stream = new FileStream(backgroundFilePath, FileMode.Create))
+            {
+                await tvShowBindingModel.BackgroundPhoto.CopyToAsync(stream);
+            }
+
+            tvSeriesFromDb.Name = tvShowBindingModel.Name;
+            tvSeriesFromDb.Description = tvShowBindingModel.Description;
+            tvSeriesFromDb.LongDescription = tvShowBindingModel.LongDescription;
+            tvSeriesFromDb.Network = tvShowBindingModel.Network;
+            tvSeriesFromDb.EmissionHour = tvShowBindingModel.EmissionHour;
+            tvSeriesFromDb.EpisodeLength = tvShowBindingModel.EpisodeLength;
+            tvSeriesFromDb.PhotoName = fileName;
+            tvSeriesFromDb.BackgroundPhotoName = backgroundFileName;
+
+            var result = await _tvShowRepository.UpdateAsync(tvSeriesFromDb);
             if (!result)
             {
                 response.AddError(Model.TvShow, Error.tvShow_Updating);

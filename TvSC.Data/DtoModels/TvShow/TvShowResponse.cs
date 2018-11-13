@@ -13,10 +13,12 @@ namespace TvSC.Data.DtoModels.TvShow
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string LongDescription { get; set; }
         public string Network { get; set; }
         public int EpisodeLength { get; set; }
         public string EmissionHour { get; set; }
         public string PhotoName { get; set; }
+        public string BackgroundPhotoName { get; set; }
         public int Status { get; set; }
         public ICollection<SeasonDto> Seasons { get; set; }
         public ICollection<ActorDto> Actors { get; set; }

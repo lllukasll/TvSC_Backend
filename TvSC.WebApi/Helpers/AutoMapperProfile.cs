@@ -31,8 +31,14 @@ namespace TvSC.WebApi.Helpers
 
         public void CreateMappings()
         {
-            CreateMap<TvShow, AddTvShowBindingModel>().ReverseMap();
-            CreateMap<TvShow, UpdateTvShowBindingModel>().ReverseMap();
+            CreateMap<AddTvShowBindingModel, TvShow>()
+                .ForMember(x => x.BackgroundPhotoName, opt => opt.Ignore())
+                .ForMember(x => x.PhotoName, opt => opt.Ignore()); ;
+
+            CreateMap<UpdateTvShowBindingModel, TvShow>()
+                .ForMember(x => x.BackgroundPhotoName, opt => opt.Ignore())
+                .ForMember(x => x.PhotoName, opt =>opt.Ignore());
+
             CreateMap<TvShow, TvShowResponse>().ReverseMap();
             CreateMap<TvShow, TvShowDto>().ReverseMap();
 
