@@ -59,7 +59,7 @@ namespace TvSC.Services.Services
                 return response;
             }
 
-            var episodeInDb = _episodeRepository.GetByAsync(x => x.EpisodeNumber == episodeBindingModel.EpisodeNumber);
+            var episodeInDb = await _episodeRepository.GetByAsync(x => x.EpisodeNumber == episodeBindingModel.EpisodeNumber && x.SeasonId == seasonId);
 
             if (episodeInDb != null)
             {

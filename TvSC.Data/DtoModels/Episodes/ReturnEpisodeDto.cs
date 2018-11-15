@@ -16,5 +16,7 @@ namespace TvSC.Data.DtoModels.Episodes
         public string EpisodeName { get; set; }
         public DateTime AiringDate { get; set; }
         public TvSeriesRatingsDto TvSeriesRatings { get; set; }
+        public string BackgroundPhotoName { get; set; }
+        public string Description { get; set; }
     }
 }

@@ -52,6 +52,8 @@ namespace TvSC.WebApi.Helpers
             CreateMap<Episode, ReturnEpisodeDto>()
                 .ForMember(dest => dest.SeasonNumber, opt => opt.MapFrom(x => x.SeasonNumber))
                 .ForPath(dest => dest.TvShowName, opt => opt.MapFrom(x => x.Season.TvShow.Name))
+                .ForPath(dest => dest.BackgroundPhotoName, opt => opt.MapFrom(x => x.Season.TvShow.BackgroundPhotoName))
+                .ForPath(dest => dest.Description, opt => opt.MapFrom(x => x.Season.TvShow.Description))
                 .ForPath(dest => dest.TvSeriesRatings, opt => opt.MapFrom(x => x.Season.TvShow.TvSeriesRatings));
 
             CreateMap<AddTvSeriesRatingBindingModel, TvSeriesUserRating>();
