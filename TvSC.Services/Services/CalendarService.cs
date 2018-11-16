@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using TvSC.Data.BindingModels.Calendar;
 using TvSC.Data.DbModels;
 using TvSC.Data.DtoModels;
 using TvSC.Data.DtoModels.Episodes;
@@ -17,7 +18,7 @@ namespace TvSC.Services.Services
         private readonly IRepository<Episode> _episodeRepository;
         private readonly IMapper _mapper;
 
-        public CalendarService(IRepository<Episode> episodeRepository, IMapper mapper)
+        public CalendarService(IRepository<Episode> episodeRepository,IMapper mapper)
         {
             _episodeRepository = episodeRepository;
             _mapper = mapper;
@@ -46,10 +47,20 @@ namespace TvSC.Services.Services
             return response;
         }
 
-        public async Task<ResponsesDto<ReturnEpisodeDto>> GetWeekEpisodes(DateTime date)
+        public async Task<ResponsesDto<ReturnEpisodeDto>> GetWeekEpisodes(GetWeekEpisodesBindingModel getWeekEpisodesBindingModel)
         {
             var response = new ResponsesDto<ReturnEpisodeDto>();
-            var day = date.DayOfWeek;
+            var episodes = _episodeRepository.GetAllBy(x => x.AiringDate >= getWeekEpisodesBindingModel.dateFrom && x.AiringDate <= getWeekEpisodesBindingModel.dateTo,
+                x => x.Season, x => x.Season.TvShow, x => x.Season.TvShow.TvSeriesRatings);
+
+            var mappedEpisodes = new List<ReturnEpisodeDto>();
+
+            foreach (var episode in episodes)
+            {
+                mappedEpisodes.Add(_mapper.Map<ReturnEpisodeDto>(episode));
+            }
+
+            response.DtoObject = mappedEpisodes;
 
             return response;
         }

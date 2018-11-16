@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using TvSC.Data.BindingModels.Calendar;
 using TvSC.Data.DtoModels;
 using TvSC.Data.DtoModels.Episodes;
 
@@ -8,6 +9,6 @@ namespace TvSC.Services.Interfaces
     public interface ICalendarService
     {
         Task<ResponsesDto<ReturnEpisodeDto>> GetMonthEpisodes(int monthNumber);
-        Task<ResponsesDto<ReturnEpisodeDto>> GetWeekEpisodes(DateTime date);
+        Task<ResponsesDto<ReturnEpisodeDto>> GetWeekEpisodes(GetWeekEpisodesBindingModel getWeekEpisodesBindingModel);
     }
 }

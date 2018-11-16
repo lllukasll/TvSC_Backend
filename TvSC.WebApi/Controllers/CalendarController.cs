@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TvSC.Data.BindingModels.Calendar;
 using TvSC.Services.Interfaces;
 
 namespace TvSC.WebApi.Controllers
@@ -29,11 +30,10 @@ namespace TvSC.WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet("week")]
-        public async Task<IActionResult> GetWeekEpisodes()
+        [HttpPost("week")]
+        public async Task<IActionResult> GetWeekEpisodes([FromBody] GetWeekEpisodesBindingModel getWeekEpisodesBindingModel)
         {
-            var date = DateTime.Now;
-            var result = await _calendarService.GetWeekEpisodes(date);
+            var result = await _calendarService.GetWeekEpisodes(getWeekEpisodesBindingModel);
             if (result.ErrorOccurred)
             {
                 return BadRequest(result);
