@@ -8,9 +8,11 @@ namespace TvSC.Data.DtoModels
     {
         public string Model;
         public IDictionary<string, string> Errors;
+        public List<string> ErrorsTmp;
         public ErrorsDto()
         {
             Errors = new Dictionary<string, string>();
+            ErrorsTmp = new List<string>();
         }
     }
 }

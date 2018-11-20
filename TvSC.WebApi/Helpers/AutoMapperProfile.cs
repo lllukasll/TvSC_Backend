@@ -12,6 +12,7 @@ using TvSC.Data.BindingModels.Rating;
 using TvSC.Data.BindingModels.Season;
 using TvSC.Data.BindingModels.TvShow;
 using TvSC.Data.DbModels;
+using TvSC.Data.DtoModels.Account;
 using TvSC.Data.DtoModels.Category;
 using TvSC.Data.DtoModels.Episodes;
 using TvSC.Data.DtoModels.FavouriteTvSeries;
@@ -31,6 +32,8 @@ namespace TvSC.WebApi.Helpers
 
         public void CreateMappings()
         {
+            CreateMap<User, GetLoggedUserDto>();
+
             CreateMap<AddTvShowBindingModel, TvShow>()
                 .ForMember(x => x.BackgroundPhotoName, opt => opt.Ignore())
                 .ForMember(x => x.PhotoName, opt => opt.Ignore()); ;

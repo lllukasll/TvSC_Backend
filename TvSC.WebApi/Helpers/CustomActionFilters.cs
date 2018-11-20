@@ -35,7 +35,7 @@ namespace TvSC.WebApi.Helpers
 
                     var errorObjects = rawResult.GetType().GetProperty("ErrorObjects").GetValue(rawResult);
                     ResponseDto<BaseModelDto> response = new ResponseDto<BaseModelDto>();
-                    response.ErrorObjects = (List<ErrorsDto>)errorObjects;
+                    response.ErrorObjects = (List<string>)errorObjects;
 
                     if (response.ErrorOccurred)
                     {

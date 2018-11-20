@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using TvSC.Data.BindingModels;
 using TvSC.Data.DbModels;
 using TvSC.Data.DtoModels;
+using TvSC.Data.DtoModels.Account;
 using TvSC.Data.Keys;
 using TvSC.Services.Interfaces;
 
@@ -17,11 +19,13 @@ namespace TvSC.Services.Services
     {
         private readonly IHttpContextAccessor _httpContext;
         private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
 
-        public AccountService(IHttpContextAccessor httpContext, UserManager<User> userManager)
+        public AccountService(IHttpContextAccessor httpContext, UserManager<User> userManager, IMapper mapper)
         {
             _httpContext = httpContext;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         public async Task<ResponseDto<BaseModelDto>> Register(RegisterBindingModel model)
@@ -65,9 +69,9 @@ namespace TvSC.Services.Services
 
         }
 
-        public async Task<ResponseDto<LoginDto>> Login(LoginBindingModel model)
+        public async Task<ResponseDto<GetLoggedUserDto>> Login(LoginBindingModel model)
         {
-            var response = new ResponseDto<LoginDto>();
+            var response = new ResponseDto<GetLoggedUserDto>();
             var user = await _userManager.FindByNameAsync(model.Login);
             if (user == null)
             {
@@ -82,6 +86,12 @@ namespace TvSC.Services.Services
                 identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
 
                 await _httpContext.HttpContext.SignInAsync("Identity.Application", new ClaimsPrincipal(identity), new AuthenticationProperties { IsPersistent = true });
+
+                var userFromDb = await _userManager.FindByNameAsync(user.Id);
+                var mappedUser = _mapper.Map<GetLoggedUserDto>(userFromDb);
+
+                response.DtoObject = mappedUser;
+
                 return response;
             }
 
@@ -115,6 +125,23 @@ namespace TvSC.Services.Services
             }
 
             return response;
-        }  
+        }
+
+        public async Task<ResponseDto<GetLoggedUserDto>> GetUserByCookie(string userId)
+        {
+            var response = new ResponseDto<GetLoggedUserDto>();
+
+            var user = await _userManager.FindByNameAsync(userId);
+
+            if (user == null)
+            {
+                response.AddError(Model.Account, Error.account_UserNotFound);
+            }
+
+            var mappedUser = _mapper.Map<GetLoggedUserDto>(user);
+            response.DtoObject = mappedUser;
+
+            return response;
+        }
     }
 }

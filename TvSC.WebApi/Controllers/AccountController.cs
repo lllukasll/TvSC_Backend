@@ -10,11 +10,13 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TvSC.Data.BindingModels;
 using TvSC.Data.DbModels;
 using TvSC.Services.Interfaces;
+using TvSC.WebApi.Helpers;
 
 namespace TvSC.WebApi.Controllers
 {
     [Route("Account")]
     [Authorize]
+    [CustomActionFilters]
     public class AccountController : BaseResponseController
     {
         private readonly IAccountService _accountService;
@@ -22,6 +24,19 @@ namespace TvSC.WebApi.Controllers
         public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
+        }
+
+        [HttpGet("getUserByCookie")]
+        public async Task<IActionResult> GetUserByCookie()
+        {
+            var userId = User.Identity.Name;
+            var result = await _accountService.GetUserByCookie(userId);
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
         [HttpPost("Register")]

@@ -11,54 +11,61 @@ namespace TvSC.Data.DtoModels
 
         public bool ErrorOccurred => ErrorObjects.Count > 0;
 
-        public List<ErrorsDto> ErrorObjects { get; set; }
+        public List<string> ErrorObjects { get; set; }
 
         public ResponseDto()
         {
-            ErrorObjects = new List<ErrorsDto>();
+            ErrorObjects = new List<string>();
         }
 
-        public void Merge(ResponseDto<T> otherResponse)
-        {
-            foreach (var newError in otherResponse.ErrorObjects)
-            {
-                foreach (var existingError in ErrorObjects)
-                    if (existingError.Model != newError.Model)
-                    {
-                        this.ErrorObjects.Add(newError);
-                    }
-                    else
-                    {
-                        foreach (var Error in newError.Errors)
-                        {
-                            if (!existingError.Errors.ContainsKey(Error.Key))
-                                existingError.Errors.Add(Error);
-                        }
-                    }
-            }
-        }
+        //public void Merge(ResponseDto<T> otherResponse)
+        //{
+        //    foreach (var newError in otherResponse.ErrorObjects)
+        //    {
+        //        foreach (var existingError in ErrorObjects)
+        //            if (existingError.Model != newError.Model)
+        //            {
+        //                this.ErrorObjects.Add(newError);
+        //            }
+        //            else
+        //            {
+        //                foreach (var Error in newError.Errors)
+        //                {
+        //                    if (!existingError.Errors.ContainsKey(Error.Key))
+        //                        existingError.Errors.Add(Error);
+        //                }
+        //            }
+        //    }
+        //}
 
         public void AddError(string Object, string errorKey)
         {
-            bool objectExists = false;
-            foreach (var ErrorObject in ErrorObjects)
+            //bool objectExists = false;
+            foreach (var errorObject in ErrorObjects)
             {
-                if (ErrorObject.Model == Object)
+                if (errorObject == errorKey)
                 {
-                    objectExists = true;
-                    if (!ErrorObject.Errors.ContainsKey(errorKey))
-                    {
-                        ErrorObject.Errors.Add(errorKey, "");
-                    }
+                    return;
                 }
+                //if (ErrorObject.Model == Object)
+                //{
+                //    objectExists = true;
+                //    ErrorObject.ErrorsTmp.Add(errorKey);
+                //    //if (!ErrorObject.Errors.ContainsKey(errorKey))
+                //    //{
+                //    //    ErrorObject.Errors.Add(errorKey, "");
+                //    //}
+                //}
             }
-            if (objectExists)
-            {
-                return;
-            }
-            IDictionary<string, string> ErrorForObjectToAdd = new Dictionary<string, string>();
-            ErrorForObjectToAdd.Add(errorKey, "");
-            ErrorObjects.Add(new ErrorsDto { Model = Object, Errors = ErrorForObjectToAdd });
+
+            ErrorObjects.Add(errorKey);
+            //if (objectExists)
+            //{
+            //    return;
+            //}
+            //IDictionary<string, string> ErrorForObjectToAdd = new Dictionary<string, string>();
+            //ErrorForObjectToAdd.Add(errorKey, "");
+            //ErrorObjects.Add(new ErrorsDto { Model = Object, ErrorsTmp = new List<string> { errorKey } });
         }
     }
 }
