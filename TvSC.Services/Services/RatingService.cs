@@ -73,7 +73,7 @@ namespace TvSC.Services.Services
                 return response;
             }
 
-            var rating = await _tvSeriesUserRatingRepository.GetByAsync(x => x.UserId == loggedUser);
+            var rating = await _tvSeriesUserRatingRepository.GetByAsync(x => x.UserId == loggedUser && x.TvShowId == tvSeriesId);
             if (rating == null)
             {
                 response.AddError(Model.Rating, Error.rating_Not_Added);
@@ -99,7 +99,7 @@ namespace TvSC.Services.Services
                 return response;
             }
 
-            var ratingExists = await _tvSeriesUserRatingRepository.ExistAsync(x => x.UserId == userLogged);
+            var ratingExists = await _tvSeriesUserRatingRepository.ExistAsync(x => x.UserId == userLogged && x.TvShowId == tvSeriesId);
             if (ratingExists)
             {
                 response.AddError(Model.Rating, Error.rating_Already_Added);

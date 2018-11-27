@@ -20,9 +20,11 @@ namespace TvSC.Data.DtoModels.TvShow
         public string PhotoName { get; set; }
         public string BackgroundPhotoName { get; set; }
         public int Status { get; set; }
+        public bool IsFavourite { get; set; }
         public ICollection<SeasonDto> Seasons { get; set; }
         public ICollection<ActorDto> Actors { get; set; }
         public ICollection<CategoryResponse> Categories { get; set; }
         public TvSeriesRatingsDto TvSeriesRatings { get; set; }
+        public TvSeriesRatingsDto UserRatingDto { get; set; }
     }
 }

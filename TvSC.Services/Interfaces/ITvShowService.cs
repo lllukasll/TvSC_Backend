@@ -12,7 +12,7 @@ namespace TvSC.Services.Interfaces
     public interface ITvShowService
     {
         Task<ResponseDto<SortedTvShowsResponse>> GetAllTvShows(SearchByParameters parameters);
-        Task<ResponseDto<TvShowResponse>> GetTvSeries(int tvSeriesId);
+        Task<ResponseDto<TvShowResponse>> GetTvSeries(int tvSeriesId, string userId);
         Task<ResponseDto<BaseModelDto>> AddTvShow(AddTvShowBindingModel tvShowBindingModel);
         Task<ResponseDto<BaseModelDto>> UpdateTvShow(int id, UpdateTvShowBindingModel tvShowBindingModel);
         Task<ResponseDto<BaseModelDto>> DeleteTvShow(int tvSeriesId);

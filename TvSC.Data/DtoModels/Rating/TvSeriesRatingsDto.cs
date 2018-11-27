@@ -6,6 +6,7 @@ namespace TvSC.Data.DtoModels.Rating
 {
     public class TvSeriesRatingsDto
     {
+        public int Id { get; set; }
         public int Story { get; set; }
         public int Music { get; set; }
         public int Effects { get; set; }

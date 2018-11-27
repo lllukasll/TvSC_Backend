@@ -11,6 +11,7 @@ using TvSC.Data.BindingModels.TvShow;
 using TvSC.Data.DbModels;
 using TvSC.Data.DtoModels;
 using TvSC.Data.DtoModels.Category;
+using TvSC.Data.DtoModels.Rating;
 using TvSC.Data.DtoModels.TvShow;
 using TvSC.Data.Keys;
 using TvSC.Repo.Interfaces;
@@ -24,14 +25,19 @@ namespace TvSC.Services.Services
         private readonly IActorAssignmentService _actorAssignmentService;
         private readonly IRepository<Category> _categoryRepository;
         private readonly ITvShowCategoriesAssignmentsService _tvShowCategoriesAssignmentsService;
+        private readonly IUserFavouriteTvShowsService _userFavouriteTvShowsService;
+        private readonly IRatingService _ratingService;
         private readonly IMapper _mapper;
         public TvShowService(IRepository<TvShow> tvShowRepository, IActorAssignmentService actorAssignmentService, IRepository<Category> categoryRepository,
-                                ITvShowCategoriesAssignmentsService tvShowCategoriesAssignmentsService, IMapper mapper)
+                             ITvShowCategoriesAssignmentsService tvShowCategoriesAssignmentsService, IUserFavouriteTvShowsService userFavouriteTvShowsService ,
+                             IRatingService ratingService, IMapper mapper)
         {
             _tvShowRepository = tvShowRepository;
             _actorAssignmentService = actorAssignmentService;
             _categoryRepository = categoryRepository;
             _tvShowCategoriesAssignmentsService = tvShowCategoriesAssignmentsService;
+            _userFavouriteTvShowsService = userFavouriteTvShowsService;
+            _ratingService = ratingService;
             _mapper = mapper;
         }
 
@@ -149,7 +155,7 @@ namespace TvSC.Services.Services
             return tvShowsByNetworkFinal;
         }
 
-        public async Task<ResponseDto<TvShowResponse>> GetTvSeries(int tvSeriesId)
+        public async Task<ResponseDto<TvShowResponse>> GetTvSeries(int tvSeriesId, string userId)
         {
             var response = new ResponseDto<TvShowResponse>();
             var tvSeriesExists = await _tvShowRepository.ExistAsync(x => x.Id == tvSeriesId);
@@ -169,6 +175,25 @@ namespace TvSC.Services.Services
 
             mappedTvSeries.Actors = assignments.DtoObject;
             mappedTvSeries.Categories = categoryAssignments.DtoObject;
+
+            if (userId != null)
+            {
+                var userFavourites = await _userFavouriteTvShowsService.GetUserFavouriteTvSeries(userId);
+                mappedTvSeries.IsFavourite = userFavourites.DtoObject.Any(x => x.Id == tvSeriesId);
+
+                var userRating = await _ratingService.GetTvSeriesRatingForUser(userId, tvSeriesId);
+                if (!userRating.ErrorOccurred)
+                {
+                    mappedTvSeries.UserRatingDto = new TvSeriesRatingsDto
+                    {
+                        Id = userRating.DtoObject.Id,
+                        Average = userRating.DtoObject.Average,
+                        Music = userRating.DtoObject.Music,
+                        Effects = userRating.DtoObject.Effects,
+                        Story = userRating.DtoObject.Story
+                    };
+                }
+            }
 
             response.DtoObject = mappedTvSeries;
 

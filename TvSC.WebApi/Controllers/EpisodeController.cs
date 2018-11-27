@@ -68,5 +68,17 @@ namespace TvSC.WebApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet("/closest/{tvSeriesId}")]
+        public async Task<IActionResult> GetClosestEpisode(int tvSeriesId)
+        {
+            var result = await _episodeService.GetClosestEpisode(tvSeriesId);
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
     }
 }

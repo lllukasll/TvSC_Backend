@@ -66,7 +66,8 @@ namespace TvSC.WebApi.Helpers
             CreateMap<TvSeriesUserRating, GetTvSeriesRatingDto>();
             CreateMap<TvSeriesRatings, GetTvSeriesRatingDto>();
 
-            CreateMap<UserFavouriteTvShows, FavouriteTvSeriesResponseDto>();
+            CreateMap<UserFavouriteTvShows, TvShowResponse>()
+                .ForPath(x => x.Id, opt => opt.MapFrom(x => x.TvShow.Id));
 
             CreateMap<UserWatchedEpisode, WatchedEpisodesResponseDto>()
                 .ForPath(dest => dest.WatchedTvSeriesEpisodes, opt => opt.MapFrom(x => x.Episode.Season.TvShow));

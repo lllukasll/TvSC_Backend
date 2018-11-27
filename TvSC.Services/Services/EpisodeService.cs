@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -17,12 +18,14 @@ namespace TvSC.Services.Services
     {
         private readonly IRepository<Episode> _episodeRepository;
         private readonly IRepository<Season> _seasonRepository;
+        private readonly IRepository<TvShow> _tvSeriesRepository;
         private readonly IMapper _mapper;
 
-        public EpisodeService(IRepository<Episode> episodeRepository, IRepository<Season> seasonRepository, IMapper mapper)
+        public EpisodeService(IRepository<Episode> episodeRepository, IRepository<Season> seasonRepository, IRepository<TvShow> tvSeriesRepository, IMapper mapper)
         {
             _episodeRepository = episodeRepository;
             _seasonRepository = seasonRepository;
+            _tvSeriesRepository = tvSeriesRepository;
             _mapper = mapper;
         }
 
@@ -120,6 +123,31 @@ namespace TvSC.Services.Services
             {
                 response.AddError(Model.Episode, Error.episode_Deleting);
                 return response;
+            }
+
+            return response;
+        }
+
+        public async Task<ResponseDto<EpisodeDto>> GetClosestEpisode(int tvSeriesId)
+        {
+            var response = new ResponseDto<EpisodeDto>();
+            var tvSeriesExists = await _tvSeriesRepository.ExistAsync(x => x.Id == tvSeriesId);
+            if (!tvSeriesExists)
+            {
+                response.AddError(Model.TvShow, Error.tvShow_NotFound);
+                return response;
+            }
+
+            DateTime localDate = DateTime.Now;
+
+            var episodes = _episodeRepository.GetAllBy(x => x.Season.TvShow.Id == tvSeriesId && x.AiringDate >= localDate);
+
+            Episode episode = new Episode();
+
+            if (episodes.Any())
+            {
+                episode = episodes.OrderBy(x => x.AiringDate).First();
+                response.DtoObject = _mapper.Map<EpisodeDto>(episode);
             }
 
             return response;

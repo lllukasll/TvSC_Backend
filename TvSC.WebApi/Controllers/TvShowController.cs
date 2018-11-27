@@ -34,7 +34,8 @@ namespace TvSC.WebApi.Controllers
         [HttpGet("{tvSeriesId}")]
         public async Task<IActionResult> GetTvShow(int tvSeriesId)
         {
-            var result = await _tvShowService.GetTvSeries(tvSeriesId);
+            var userId = User.Identity.Name;
+            var result = await _tvShowService.GetTvSeries(tvSeriesId, userId);
             if (result.ErrorOccurred)
             {
                 return BadRequest(result);

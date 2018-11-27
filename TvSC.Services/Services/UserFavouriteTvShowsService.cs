@@ -27,16 +27,16 @@ namespace TvSC.Services.Services
             _mapper = mapper;
         }
 
-        public async Task<ResponsesDto<FavouriteTvSeriesResponseDto>> GetUserFavouriteTvSeries(string userId)
+        public async Task<ResponsesDto<TvShowResponse>> GetUserFavouriteTvSeries(string userId)
         {
-            var response = new ResponsesDto<FavouriteTvSeriesResponseDto>();
+            var response = new ResponsesDto<TvShowResponse>();
 
             var favouriteTvSeriesList = _userFavouriteTvShowsRepository.GetAllBy(x => x.UserId == userId, x => x.TvShow);            
-            var mappedFavouriteTvSeries = new List<FavouriteTvSeriesResponseDto>();
+            var mappedFavouriteTvSeries = new List<TvShowResponse>();
 
             foreach (var favouriteTvSeries in favouriteTvSeriesList)
             {
-                mappedFavouriteTvSeries.Add(_mapper.Map<FavouriteTvSeriesResponseDto>(favouriteTvSeries));
+                mappedFavouriteTvSeries.Add(_mapper.Map<TvShowResponse>(favouriteTvSeries));
             }
 
             response.DtoObject = mappedFavouriteTvSeries;
@@ -80,16 +80,16 @@ namespace TvSC.Services.Services
         {
             var response = new ResponseDto<BaseModelDto>();
 
-            var favouriteTvSeriesExists = await _userFavouriteTvShowsRepository.ExistAsync(x => x.Id == favouriteTvSeriesId);
+            var favouriteTvSeriesExists = await _userFavouriteTvShowsRepository.ExistAsync(x => x.TvShowId == favouriteTvSeriesId && x.UserId == userId);
             if (!favouriteTvSeriesExists)
             {
                 response.AddError(Model.TvShow, Error.tvShow_NotFound);
                 return response;
             }
 
-            var favouriteTvSeries = await _tvSeriesRepository.GetByAsync(x => x.Id == favouriteTvSeriesId);
+            var favouriteTvSeries = await _userFavouriteTvShowsRepository.GetByAsync(x => x.TvShowId == favouriteTvSeriesId && x.UserId == userId);
 
-            var result = await _tvSeriesRepository.Remove(favouriteTvSeries);
+            var result = await _userFavouriteTvShowsRepository.Remove(favouriteTvSeries);
 
             if (!result)
             {

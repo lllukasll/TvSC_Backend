@@ -11,5 +11,6 @@ namespace TvSC.Services.Interfaces
         Task<ResponseDto<BaseModelDto>> AddEpisode(int seasonId, AddEpisodeBindingModel episodeBindingModel);
         Task<ResponseDto<BaseModelDto>> UpdateEpisode(int episodeId, UpdateEpisodeBindingModel episodeBindingModel);
         Task<ResponseDto<BaseModelDto>> DeleteEpisode(int episodeId);
+        Task<ResponseDto<EpisodeDto>> GetClosestEpisode(int tvSeriesId);
     }
 }
