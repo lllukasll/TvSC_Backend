@@ -29,9 +29,9 @@ namespace TvSC.Services.Services
             _mapper = mapper;
         }
 
-        public async Task<ResponsesDto<ActorDto>> GetTvShowAssignments(int tvShowId)
+        public async Task<ResponsesDto<TvSeriesAssignmensResponseDto>> GetTvShowAssignments(int tvShowId)
         {
-            var response = new ResponsesDto<ActorDto>();
+            var response = new ResponsesDto<TvSeriesAssignmensResponseDto>();
 
             var tvShowExists = await _tvShowRepository.ExistAsync(x => x.Id == tvShowId);
             if (!tvShowExists)
@@ -41,13 +41,17 @@ namespace TvSC.Services.Services
             }
 
             var assignments = _actorsAssignmentsRepository.GetAllBy(x => x.TvShow.Id == tvShowId, x => x.Actor);
-            var assignmentsMapped = new List<ActorDto>();
+            var assignmentsMapped = new List<TvSeriesAssignmensResponseDto>();
 
             foreach (var assignment in assignments)
             {
                 var actor = await _actorRepository.GetByAsync(x => x.Id == assignment.Actor.Id);
                 var actorMapped = _mapper.Map<ActorDto>(actor);
-                assignmentsMapped.Add(actorMapped);
+                TvSeriesAssignmensResponseDto tmpAssignment = new TvSeriesAssignmensResponseDto();
+                tmpAssignment.ActorDto = actorMapped;
+                tmpAssignment.CharacterName = assignment.CharacterName;
+                tmpAssignment.Id = assignment.Id;
+                assignmentsMapped.Add(tmpAssignment);
             }
 
             response.DtoObject = assignmentsMapped;
@@ -55,9 +59,9 @@ namespace TvSC.Services.Services
             return response;
         }
 
-        public async Task<ResponsesDto<TvShowResponse>> GetActorAssignments(int actorId)
+        public async Task<ResponsesDto<ActorAssignmentsResponseDto>> GetActorAssignments(int actorId)
         {
-            var response = new ResponsesDto<TvShowResponse>();
+            var response = new ResponsesDto<ActorAssignmentsResponseDto>();
 
             var actorExists = await _actorRepository.ExistAsync(x => x.Id == actorId);
             if (!actorExists)
@@ -67,13 +71,17 @@ namespace TvSC.Services.Services
             }
 
             var assignments = _actorsAssignmentsRepository.GetAllBy(x => x.Actor.Id == actorId, x => x.TvShow);
-            var assignmentsMapped = new List<TvShowResponse>();
+            var assignmentsMapped = new List<ActorAssignmentsResponseDto>();
 
             foreach (var assignment in assignments)
             {
                 var tvShow = await _tvShowRepository.GetByAsync(x => x.Id == assignment.TvShow.Id);
                 var tvShowMapped = _mapper.Map<TvShowResponse>(tvShow);
-                assignmentsMapped.Add(tvShowMapped);
+                ActorAssignmentsResponseDto tmpAssignment = new ActorAssignmentsResponseDto();
+                tmpAssignment.TvShow = tvShowMapped;
+                tmpAssignment.CharacterName = assignment.CharacterName;
+                tmpAssignment.Id = assignment.Id;
+                assignmentsMapped.Add(tmpAssignment);
             }
 
             response.DtoObject = assignmentsMapped;
@@ -81,7 +89,7 @@ namespace TvSC.Services.Services
             return response;
         }
 
-        public async Task<ResponseDto<BaseModelDto>> AssignActorToTvShow(int actorId, int tvShowId)
+        public async Task<ResponseDto<BaseModelDto>> AssignActorToTvShow(int actorId, int tvShowId, string characterName)
         {
             var response = new ResponseDto<BaseModelDto>();
             var actorExists = await _actorRepository.ExistAsync(x => x.Id == actorId);
@@ -113,6 +121,7 @@ namespace TvSC.Services.Services
             var assingment = new ActorsAssignments();
             assingment.Actor = actor;
             assingment.TvShow = tvShow;
+            assingment.CharacterName = characterName;
 
             var result = await _actorsAssignmentsRepository.AddAsync(assingment);
             if (!result)

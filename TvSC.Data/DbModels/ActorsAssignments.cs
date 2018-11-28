@@ -8,5 +8,6 @@ namespace TvSC.Data.DbModels
     {
         public Actor Actor { get; set; }
         public TvShow TvShow { get; set; }
+        public string CharacterName { get; set; }
     }
 }

@@ -8,9 +8,9 @@ namespace TvSC.Services.Interfaces
 {
     public interface IActorAssignmentService
     {
-        Task<ResponseDto<BaseModelDto>> AssignActorToTvShow(int actorId, int tvShowId);
+        Task<ResponseDto<BaseModelDto>> AssignActorToTvShow(int actorId, int tvShowId, string characterName);
         Task<ResponseDto<BaseModelDto>> RemoveActorAssignment(int assignmentId);
-        Task<ResponsesDto<ActorDto>> GetTvShowAssignments(int tvShowId);
-        Task<ResponsesDto<TvShowResponse>> GetActorAssignments(int actorId);
+        Task<ResponsesDto<TvSeriesAssignmensResponseDto>> GetTvShowAssignments(int tvShowId);
+        Task<ResponsesDto<ActorAssignmentsResponseDto>> GetActorAssignments(int actorId);
     }
 }

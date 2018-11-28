@@ -45,7 +45,7 @@ namespace TvSC.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAssignment([FromBody] AddAssignmentBindingModel addAssignmentBindingModel)
         {
-            var result = await _actorAssignmentService.AssignActorToTvShow(addAssignmentBindingModel.actorId, addAssignmentBindingModel.tvShowId);
+            var result = await _actorAssignmentService.AssignActorToTvShow(addAssignmentBindingModel.actorId, addAssignmentBindingModel.tvShowId, addAssignmentBindingModel.CharacterName);
             if (result.ErrorOccurred)
             {
                 return BadRequest(result);

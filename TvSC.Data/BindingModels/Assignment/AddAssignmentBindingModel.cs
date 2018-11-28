@@ -8,5 +8,6 @@ namespace TvSC.Data.BindingModels.Assignment
     {
         public int actorId { get; set; }
         public int tvShowId { get; set; }
+        public string CharacterName { get; set; }
     }
 }

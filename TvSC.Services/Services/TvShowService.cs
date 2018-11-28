@@ -27,10 +27,11 @@ namespace TvSC.Services.Services
         private readonly ITvShowCategoriesAssignmentsService _tvShowCategoriesAssignmentsService;
         private readonly IUserFavouriteTvShowsService _userFavouriteTvShowsService;
         private readonly IRatingService _ratingService;
+        private readonly IUserWatchedEpisodeService _userWatchedEpisodeService;
         private readonly IMapper _mapper;
         public TvShowService(IRepository<TvShow> tvShowRepository, IActorAssignmentService actorAssignmentService, IRepository<Category> categoryRepository,
                              ITvShowCategoriesAssignmentsService tvShowCategoriesAssignmentsService, IUserFavouriteTvShowsService userFavouriteTvShowsService ,
-                             IRatingService ratingService, IMapper mapper)
+                             IRatingService ratingService, IUserWatchedEpisodeService userWatchedEpisodeService, IMapper mapper)
         {
             _tvShowRepository = tvShowRepository;
             _actorAssignmentService = actorAssignmentService;
@@ -38,6 +39,7 @@ namespace TvSC.Services.Services
             _tvShowCategoriesAssignmentsService = tvShowCategoriesAssignmentsService;
             _userFavouriteTvShowsService = userFavouriteTvShowsService;
             _ratingService = ratingService;
+            _userWatchedEpisodeService = userWatchedEpisodeService;
             _mapper = mapper;
         }
 

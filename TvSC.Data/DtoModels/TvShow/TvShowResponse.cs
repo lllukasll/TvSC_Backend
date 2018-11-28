@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TvSC.Data.DtoModels.Actor;
+using TvSC.Data.DtoModels.Assignments;
 using TvSC.Data.DtoModels.Category;
 using TvSC.Data.DtoModels.Rating;
 using TvSC.Data.DtoModels.Season;
@@ -22,7 +23,7 @@ namespace TvSC.Data.DtoModels.TvShow
         public int Status { get; set; }
         public bool IsFavourite { get; set; }
         public ICollection<SeasonDto> Seasons { get; set; }
-        public ICollection<ActorDto> Actors { get; set; }
+        public ICollection<TvSeriesAssignmensResponseDto> Actors { get; set; }
         public ICollection<CategoryResponse> Categories { get; set; }
         public TvSeriesRatingsDto TvSeriesRatings { get; set; }
         public TvSeriesRatingsDto UserRatingDto { get; set; }
