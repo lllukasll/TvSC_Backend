@@ -19,5 +19,7 @@ namespace TvSC.Data.Keys
         public const string Assignment = "Assignment";
         public const string Category = "Category";
         public const string CategoryAssignment = "CategoryAssignment";
+        public const string Comment = "Comment";
+        public const string Notification = "Notification";
     }
 }

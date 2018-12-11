@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using TvSC.Data.BindingModels.Notification;
 using TvSC.Data.BindingModels.Rating;
 using TvSC.Data.DbModels;
 using TvSC.Data.DtoModels;
@@ -17,13 +18,15 @@ namespace TvSC.Services.Services
 {
     public class RatingService : IRatingService
     {
+        private readonly INotificationService _notificationService;
         private readonly IRepository<TvSeriesUserRating> _tvSeriesUserRatingRepository;
         private readonly IRepository<TvSeriesRatings> _tvSeriesRatingsRepository;
         private readonly IRepository<TvShow> _tvSeriesRepository;
         private readonly IMapper _mapper;
 
-        public RatingService(IRepository<TvSeriesUserRating> tvSeriesUserRatingRepository,IRepository<TvSeriesRatings> tvSeriesRatingsRepository, IRepository<TvShow> tvSeriesRepository, IMapper mapper)
+        public RatingService(INotificationService notificationService ,IRepository<TvSeriesUserRating> tvSeriesUserRatingRepository,IRepository<TvSeriesRatings> tvSeriesRatingsRepository, IRepository<TvShow> tvSeriesRepository, IMapper mapper)
         {
+            _notificationService = notificationService;
             _tvSeriesUserRatingRepository = tvSeriesUserRatingRepository;
             _tvSeriesRatingsRepository = tvSeriesRatingsRepository;
             _tvSeriesRepository = tvSeriesRepository;
@@ -117,6 +120,16 @@ namespace TvSC.Services.Services
             {
                 response.AddError(Model.Rating, Error.rating_Adding);
                 return response;
+            }
+            else
+            {
+                if (userLogged != null)
+                {
+                    AddNotificationBindingModel addNotificationBindingModel = new AddNotificationBindingModel();
+                    addNotificationBindingModel.Type = "ratedTvSeries";
+
+                    await _notificationService.AddNotification(addNotificationBindingModel, tvSeriesId, userLogged);
+                }
             }
 
             response = await AddTvSeriesRating(userRating, response);

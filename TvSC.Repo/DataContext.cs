@@ -24,6 +24,9 @@ namespace TvSC.Repo
         public DbSet<TvSeriesRatings> TvSeriesRatings { get; set; }
         public DbSet<UserFavouriteTvShows> UserFavouriteTvShows { get; set; }
         public DbSet<UserWatchedEpisode> UserWatchedTvSeries { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserFavouriteCategories> UserFavouriteCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -78,6 +81,27 @@ namespace TvSC.Repo
 
             builder.Entity<TvShowCategoryAssignments>()
                 .HasOne(x => x.Category);
+
+            builder.Entity<Comment>()
+                .HasOne(x => x.TvShow);
+
+            builder.Entity<Comment>()
+                .HasOne(x => x.User);
+
+            builder.Entity<Notification>()
+                .HasOne(x => x.User);
+
+            builder.Entity<Notification>()
+                .HasOne(x => x.TvShow);
+
+            builder.Entity<UserFavouriteTvShows>()
+                .HasOne(x => x.TvShow);
+
+            builder.Entity<UserFavouriteCategories>()
+                .HasOne(x => x.Category);
+
+            builder.Entity<UserFavouriteCategories>()
+                .HasOne(x => x.User);
 
             base.OnModelCreating(builder);
         }

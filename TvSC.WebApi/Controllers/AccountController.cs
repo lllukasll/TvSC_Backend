@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -98,6 +99,19 @@ namespace TvSC.WebApi.Controllers
 
             var userId = User.Identity.Name;
             var result = await _accountService.ChangePassword(userId, model);
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPut("updateAvatar")]
+        public async Task<IActionResult> UpdateAvatar([FromForm] UpdateAvatarBindingModel avatar)
+        {
+            var userId = User.Identity.Name;
+            var result = await _accountService.UpdateAvatar(avatar.Avatar, userId);
             if (result.ErrorOccurred)
             {
                 return BadRequest(result);

@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using TvSC.Data.BindingModels.Notification;
 using TvSC.Data.DbModels;
 using TvSC.Data.DtoModels;
 using TvSC.Data.DtoModels.FavouriteTvSeries;
@@ -16,12 +17,14 @@ namespace TvSC.Services.Services
 {
     public class UserFavouriteTvShowsService : IUserFavouriteTvShowsService
     {
+        private readonly INotificationService _notificationService;
         private readonly IRepository<UserFavouriteTvShows> _userFavouriteTvShowsRepository;
         private readonly IRepository<TvShow> _tvSeriesRepository;
         private readonly IMapper _mapper;
 
-        public UserFavouriteTvShowsService(IRepository<UserFavouriteTvShows> userFavouriteTvShowsRepository, IRepository<TvShow> tvSeriesRepository, IMapper mapper)
+        public UserFavouriteTvShowsService(INotificationService notificationService ,IRepository<UserFavouriteTvShows> userFavouriteTvShowsRepository, IRepository<TvShow> tvSeriesRepository, IMapper mapper)
         {
+            _notificationService = notificationService;
             _userFavouriteTvShowsRepository = userFavouriteTvShowsRepository;
             _tvSeriesRepository = tvSeriesRepository;
             _mapper = mapper;
@@ -71,6 +74,15 @@ namespace TvSC.Services.Services
             {
                 response.AddError(Model.FavouriteTvShow, Error.favouriteTvShow_Adding);
                 return response;
+            } else
+            {
+                if (userId != null)
+                {
+                    AddNotificationBindingModel addNotificationBindingModel = new AddNotificationBindingModel();
+                    addNotificationBindingModel.Type = "favouriteTvSeries";
+
+                    await _notificationService.AddNotification(addNotificationBindingModel, tvSeriesId, userId);
+                }
             }
 
             return response;

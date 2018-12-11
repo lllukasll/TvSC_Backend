@@ -162,6 +162,12 @@ namespace TvSC.Services.Services
             var response = new ResponseDto<TvShowResponse>();
             var tvSeriesExists = await _tvShowRepository.ExistAsync(x => x.Id == tvSeriesId);
 
+            if (userId == null)
+            {
+                response.AddError(Model.Account, Error.account_Login);
+                return response;
+            }
+
             if(!tvSeriesExists)
             {
                 response.AddError(Model.TvShow, Error.tvShow_NotFound);
@@ -197,6 +203,24 @@ namespace TvSC.Services.Services
                 }
             }
 
+            foreach (var season in mappedTvSeries.Seasons)
+            {
+                var seasonWatched = true;
+                foreach (var episode in season.Episodes)
+                {
+                    if (await _userWatchedEpisodeService.CheckIfEpisodeWatched(episode.Id, userId))
+                    {
+                        episode.Watched = true;
+                    }
+                    else
+                    {
+                        seasonWatched = false;
+                    }
+                }
+
+                season.Watched = seasonWatched;
+            }
+
             response.DtoObject = mappedTvSeries;
 
             return response;
@@ -221,7 +245,7 @@ namespace TvSC.Services.Services
 
             using (var stream = new FileStream(backgroundFilePath, FileMode.Create))
             {
-                await tvShowBindingModel.Photo.CopyToAsync(stream);
+                await tvShowBindingModel.BackgroundPhoto.CopyToAsync(stream);
             }
 
             var tvShow = _mapper.Map<TvShow>(tvShowBindingModel);

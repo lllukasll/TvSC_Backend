@@ -14,6 +14,7 @@ using TvSC.Data.BindingModels.TvShow;
 using TvSC.Data.DbModels;
 using TvSC.Data.DtoModels.Account;
 using TvSC.Data.DtoModels.Category;
+using TvSC.Data.DtoModels.Comment;
 using TvSC.Data.DtoModels.Episodes;
 using TvSC.Data.DtoModels.FavouriteTvSeries;
 using TvSC.Data.DtoModels.Rating;
@@ -45,8 +46,9 @@ namespace TvSC.WebApi.Helpers
             CreateMap<TvShow, TvShowResponse>().ReverseMap();
             CreateMap<TvShow, TvShowDto>().ReverseMap();
 
-            CreateMap<Season, SeasonResponse>().ReverseMap();
-            CreateMap<Season, SeasonResponseDto>().ReverseMap();
+            CreateMap<Season, SeasonResponse>();
+            CreateMap<Season, SeasonDto>().ForMember(x => x.Watched, opt => opt.Ignore());
+            CreateMap<Season, SeasonResponseDto>();
             CreateMap<Season, AddSeasonBindingModel>().ReverseMap();
 
             CreateMap<Episode, EpisodeDto>().ReverseMap();
@@ -67,7 +69,11 @@ namespace TvSC.WebApi.Helpers
             CreateMap<TvSeriesRatings, GetTvSeriesRatingDto>();
 
             CreateMap<UserFavouriteTvShows, TvShowResponse>()
-                .ForPath(x => x.Id, opt => opt.MapFrom(x => x.TvShow.Id));
+                .ForPath(x => x.Id, opt => opt.MapFrom(x => x.TvShow.Id))
+                .ForPath(x => x.Name, opt => opt.MapFrom(x => x.TvShow.Name))
+                .ForPath(x => x.PhotoName, opt => opt.MapFrom(x => x.TvShow.PhotoName))
+                .ForPath(x => x.Description, opt => opt.MapFrom(x => x.TvShow.Description))
+                .ForPath(x => x.Network, opt => opt.MapFrom(x => x.TvShow.Network));
 
             CreateMap<UserWatchedEpisode, WatchedEpisodesResponseDto>()
                 .ForPath(dest => dest.WatchedTvSeriesEpisodes, opt => opt.MapFrom(x => x.Episode.Season.TvShow));
@@ -78,6 +84,8 @@ namespace TvSC.WebApi.Helpers
             CreateMap<AddCategoryBindingModel, Category>();
 
             CreateMap<Category, CategoryResponse>();
+
+            CreateMap<Comment, GetTvSeriesCommentsDto>();
             //CreateMap<UserWatchedEpisode, watched>();
 
         }

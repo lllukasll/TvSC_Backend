@@ -4,13 +4,11 @@ using System.Text;
 
 namespace TvSC.Data.DbModels
 {
-    public class UserWatchedEpisode : BaseModel
+    public class UserFavouriteCategories : BaseModel
     {
-        public Episode Episode { get; set; }
-        public int EpisodeId { get; set; }
+        public Category Category { get; set; }
+        public int CategoryId { get; set; }
         public User User { get; set; }
         public string UserId { get; set; }
-
-        public DateTime CreateDateTime { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using TvSC.Data.BindingModels;
 using TvSC.Data.DtoModels;
 using TvSC.Data.DtoModels.Account;
@@ -12,5 +13,6 @@ namespace TvSC.Services.Interfaces
         Task LogOut();
         Task<ResponseDto<BaseModelDto>> ChangePassword(string userId, ChangePasswordBindingModel model);
         Task<ResponseDto<GetLoggedUserDto>> GetUserByCookie(string userId);
+        Task<ResponseDto<BaseModelDto>> UpdateAvatar(IFormFile avatar, string userId);
     }
 }

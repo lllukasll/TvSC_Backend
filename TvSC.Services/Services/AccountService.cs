@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -53,6 +54,7 @@ namespace TvSC.Services.Services
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     UserName = model.UserName,
+                    Avatar = ""
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Errors.Any())
@@ -67,6 +69,51 @@ namespace TvSC.Services.Services
 
             return response;
 
+        }
+
+        public async Task<ResponseDto<BaseModelDto>> UpdateAvatar(IFormFile avatar, string userId)
+        {
+            var response = new ResponseDto<BaseModelDto>();
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                response.AddError(Model.Account, Error.account_UserNotFound);
+                return response;
+            }
+            else
+            {
+                if (user.Avatar != "")
+                {
+                    if (File.Exists(("wwwroot\\UsersPictures\\" + user.Avatar)))
+                    {
+                        File.Delete("wwwroot\\UsersPictures\\" + user.Avatar);
+                    }
+                }
+                
+                if (!Directory.Exists("wwwroot\\UsersPictures"))
+                    Directory.CreateDirectory("wwwroot\\UsersPictures");
+
+                var fileName = Guid.NewGuid() + Path.GetExtension(avatar.FileName);
+                var filePath = Path.Combine("wwwroot\\UsersPictures", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await avatar.CopyToAsync(stream);
+                }
+
+                user.Avatar = fileName;
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Errors.Any())
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        response.AddError(Model.Account, error.Description);
+                    }
+                    return response;
+                }
+            }
+
+            return response;
         }
 
         public async Task<ResponseDto<GetLoggedUserDto>> Login(LoginBindingModel model)

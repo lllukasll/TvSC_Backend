@@ -43,6 +43,7 @@ namespace TvSC.WebApi
             services.AddAutoMapper();
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<ITvShowService, TvShowService>();
             services.AddTransient<ISeasonService, SeasonService>();
@@ -55,6 +56,10 @@ namespace TvSC.WebApi
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IActorAssignmentService, ActorsAssignmentsService>();
             services.AddTransient<ITvShowCategoriesAssignmentsService, TvShowCategoriesAssignmentsService>();
+            services.AddTransient<IUserFavouriteCategoriesService, UserFavouriteCategoriesService>();
+            services.AddTransient<IStateService, StatsService>();
+            services.AddTransient<ICommentService, CommentService>();
+            
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             services.AddIdentityCore<User>(options => { });

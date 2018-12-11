@@ -8,6 +8,7 @@ namespace TvSC.Data.Keys
     {
         public const string data_Invalid = "Zły format danych";
 
+        public const string account_Login = "Musisz się zalogować";
         public const string account_UserExists = "Użytkownik o takiej nazwie już istnineje.";
         public const string account_EmailExists = "Użytkownik o takim e-mail'u już istnieje.";
         public const string account_WrongCredentials = "Błędny login lub hasło.";
@@ -68,5 +69,14 @@ namespace TvSC.Data.Keys
         public const string categoryAssignment_Adding = "Wystąpił problem podczas przypisywania kategorii do serialu";
         public const string categoryAssignment_NotFound = "Podane przypisanie kategorii do serialu nie istnieje";
         public const string categoryAssignment_Deleting = "Wystąpił problem podczas usuwania przypisania kategorii";
+
+        public const string comment_Adding = "Wystąpił problem podczas dodawania komentarza";
+        public const string comment_Deleting = "Wystąpił problem podczas usuwania komentarza";
+        public const string comment_Author = "Nie jesteś autorem tego komentarza";
+        public const string comment_Updating = "Wystąpił problem podczas aktualizowania komentarza";
+
+        public const string notification_Adding = "Wystąpił problem podczas dodawania notyfikacji";
+        public const string notification_NotFound = "Podana notyfikacja nie została znaleziona w bazie danych";
+        public const string notification_Deleting = "Wystąpił problem podczas usuwania notyfikacji";
     }
 }
