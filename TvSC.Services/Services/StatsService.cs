@@ -25,6 +25,7 @@ namespace TvSC.Services.Services
             _userFavouriteTvShowsRepository = userFavouriteTvShowsRepository;
         }
 
+
         public async Task<ResponseDto<UserStatsResponseDto>> GetUserStats(string userId)
         {
             var response = new ResponseDto<UserStatsResponseDto>();

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using TvSC.Data.BindingModels.Comment;
 using TvSC.Data.BindingModels.Notification;
 using TvSC.Data.DbModels;
@@ -19,13 +20,15 @@ namespace TvSC.Services.Services
     {
         private readonly INotificationService _notificationService;
         private readonly IRepository<Comment> _commentRepository;
+        private readonly UserManager<User> _userManager;
         private readonly IRepository<TvShow> _tvSeriesRepository;
         private readonly IMapper _mapper;
 
-        public CommentService(INotificationService notificationService ,IRepository<Comment> commentRepository, IRepository<TvShow> tvSeriesRepository, IMapper mapper)
+        public CommentService(INotificationService notificationService ,IRepository<Comment> commentRepository, UserManager<User> userManager, IRepository<TvShow> tvSeriesRepository, IMapper mapper)
         {
             _notificationService = notificationService;
             _commentRepository = commentRepository;
+            _userManager = userManager;
             _tvSeriesRepository = tvSeriesRepository;
             _mapper = mapper;
         }
@@ -92,7 +95,11 @@ namespace TvSC.Services.Services
                 List<GetTvSeriesCommentsDto> tvSeriesComments = new List<GetTvSeriesCommentsDto>();
                 foreach (var comment in comments)
                 {
-                    tvSeriesComments.Add(_mapper.Map<GetTvSeriesCommentsDto>(comment));
+                    var user = await _userManager.FindByIdAsync(comment.UserId);
+                    var mappedComment = _mapper.Map<GetTvSeriesCommentsDto>(comment);
+                    mappedComment.Avatar = user.Avatar;
+
+                    tvSeriesComments.Add(mappedComment);
                 }
 
                 response.DtoObject = tvSeriesComments;
